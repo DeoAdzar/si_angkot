@@ -1,0 +1,81 @@
+name: si_angkot
+description: "Aplikasi monitoring angkot berbasis flutter"
+publish_to: 'none'
+version: 0.0.1
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.1.4
+  circular_image: ^0.0.6
+  build_runner: ^2.4.15
+  flutter_gen_runner: ^5.9.0
+  shared_preferences: ^2.5.2
+  dio: ^5.8.0+1
+  flutter_svg: ^2.0.17
+  simple_gradient_text: ^1.3.0
+
+# akan generate folder lib/gen dan seisinya dengan perintah dart run build_runner build -d
+# untuk mengenerate file assets, colors, dan fonts
+# agar lebih mudah untuk memanggil asset,fonts,dan colors di dalam aplikasi
+flutter_gen:
+  output: lib/gen/ # Optional (default: lib/gen/)
+  line_length: 80 # Optional (default: 80)
+  integrations:
+    flutter_svg: true
+  assets:
+    enabled: true
+    outputs:
+      class_name: MyAssets
+  colors:
+    enabled: true
+    inputs:
+      - assets/color/colors.xml
+    outputs:
+      class_name: MyColors
+  fonts:
+    enabled: true
+    outputs:
+      class_name: MyFonts
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/svg/
+    - assets/png/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/poppins_light.ttf
+          weight: 300
+        - asset: assets/fonts/poppins_medium.ttf
+          weight: 300
+        - asset: assets/fonts/poppins_regular.ttf
+          weight: 400
+        - asset: assets/fonts/poppins_semibold.ttf
+          weight: 600
+        - asset: assets/fonts/poppins_bold.ttf
+          weight: 700
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter_light.ttf
+          weight: 300
+        - asset: assets/fonts/Inter_medium.ttf
+          weight: 300
+        - asset: assets/fonts/Inter_regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter_semi_bold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter_bold.ttf
+          weight: 700
+
