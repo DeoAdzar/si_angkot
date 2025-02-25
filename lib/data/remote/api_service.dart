@@ -12,7 +12,7 @@ class ApiService {
   ApiService._internal() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://yourapi.com/api/',
+        baseUrl: Constant.BASE_URL,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
         headers: {
@@ -62,48 +62,60 @@ class ApiService {
     _token = token;
   }
 
-  Future<Response> get(String endpoint, {Map<String, dynamic>? queryParams, bool useToken = false}) async {
+  Future<Response> get(String endpoint,
+      {Map<String, dynamic>? queryParams, bool useToken = false}) async {
     try {
       return await _dio.get(
         endpoint,
         queryParameters: queryParams,
-        options: useToken ? Options(headers: {'Authorization': 'Bearer $_token'}) : null,
+        options: useToken
+            ? Options(headers: {'Authorization': 'Bearer $_token'})
+            : null,
       );
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<Response> post(String endpoint, {dynamic data, bool useToken = false}) async {
+  Future<Response> post(String endpoint,
+      {dynamic data, bool useToken = false}) async {
     try {
       return await _dio.post(
         endpoint,
         data: data,
-        options: useToken ? Options(headers: {'Authorization': 'Bearer $_token'}) : null,
+        options: useToken
+            ? Options(headers: {'Authorization': 'Bearer $_token'})
+            : null,
       );
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<Response> put(String endpoint, {dynamic data, bool useToken = false}) async {
+  Future<Response> put(String endpoint,
+      {dynamic data, bool useToken = false}) async {
     try {
       return await _dio.put(
         endpoint,
         data: data,
-        options: useToken ? Options(headers: {'Authorization': 'Bearer $_token'}) : null,
+        options: useToken
+            ? Options(headers: {'Authorization': 'Bearer $_token'})
+            : null,
       );
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<Response> delete(String endpoint, {dynamic data, bool useToken = false}) async {
+  Future<Response> delete(String endpoint,
+      {dynamic data, bool useToken = false}) async {
     try {
       return await _dio.delete(
         endpoint,
         data: data,
-        options: useToken ? Options(headers: {'Authorization': 'Bearer $_token'}) : null,
+        options: useToken
+            ? Options(headers: {'Authorization': 'Bearer $_token'})
+            : null,
       );
     } catch (e) {
       rethrow;

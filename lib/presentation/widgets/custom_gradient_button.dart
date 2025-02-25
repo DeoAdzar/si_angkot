@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:si_angkot/core/utils/app_extension.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
 
 // Gradient Button Widget
@@ -17,11 +16,19 @@ class CustomGradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
+      borderRadius: BorderRadius.circular(
+          50), // Tambahkan di sini juga agar efek ripple mengikuti bentuk rounded
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-        ),
+          borderRadius: BorderRadius.circular(50),
+          gradient: LinearGradient(
+            colors: [
+              MyColors.primaryColor,
+              MyColors.secondaryColor,
+            ],
+          ),
+        ), // Pastikan withGradient mempertahankan borderRadius
         child: Center(
           child: Text(
             text,
@@ -32,7 +39,7 @@ class CustomGradientButton extends StatelessWidget {
             ),
           ),
         ),
-      ).withGradient([MyColors.primaryColor, MyColors.secondaryColor]),
+      ),
     );
   }
 }

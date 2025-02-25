@@ -1,7 +1,7 @@
-
 class Constant {
   static const String APP_NAME = 'Si Angkot';
-  static const String APP_DESCRIPTION = 'Sistem Monitoring Angkot\nDinas Perhubungan Madiun';
+  static const String APP_DESCRIPTION =
+      'Sistem Monitoring Angkot\nDinas Perhubungan Madiun';
   static const String DINAS_PERHUBUNGAN = 'Dinas Perhubungan';
 
   static const String ROLE_KEY = 'user_role';
@@ -12,7 +12,7 @@ class Constant {
 
   static const String LOGIN = "Log in";
   static const String REGISTER = "Daftar";
-  static const String FORGOT_PASSWORD = "Lupa Password?";
+  static const String FORGOT_PASSWORD = "Lupa Kata Sandi?";
   static const String HOME = "Beranda";
   static const String CREATE_ACCOUNT = "Buat Akun";
   static const String DOESNT_HAVE_ACCOUNT = "Belum punya akun?";
@@ -27,18 +27,21 @@ class Constant {
   static const String DRIVER = "Driver";
 
   static const String WELCOME = "Selamat Datang";
-  static const String WELCOME_DESCRIPTION_PARENT = "Monitoring anakmu di sini sekarang dimana";
-  static const String WELCOME_DESCRIPTION_DRIVER = "Semangat bekerja, Hati - hati dijalan";
+  static const String WELCOME_DESCRIPTION_PARENT =
+      "Monitoring anakmu di sini sekarang dimana";
+  static const String WELCOME_DESCRIPTION_DRIVER =
+      "Semangat bekerja, Hati - hati dijalan";
   static const String SETTING = "Pengaturan";
   static const String SETTING_PROFILE = "Pengaturan Profil";
   static const String FORM_REGISTER = "Formulir Pendaftaran";
   static const String HISTORY = "Riwayat";
 
   static const String REGISTER_CHILDREN = "Pendaftaran Anak";
-  static const String STATUS ="Status";
+  static const String STATUS = "Status";
   static const String PROFILE = "Profile";
   static const String SCAN_QR = "Scan QR";
-  static const String SCAN_QR_DESC = "Tunjuakn Kode QR ini kepada driver saat naik atau turun";
+  static const String SCAN_QR_DESC =
+      "Tunjuakn Kode QR ini kepada driver saat naik atau turun";
 
   static const String DRIVER_STATUS = "Status Driver";
   static const String CAR = "Angkot";
@@ -55,4 +58,8 @@ class Constant {
   static const String DEPARTURE = "Berangkat";
   static const String ARRIVAL = "Pulang";
 
+  //API MESSAGE
+  // TODO change with your API base URL later
+  static const String BASE_URL = "https://yourapi.com/api/";
+  static const String SOMETHING_WRONG = "Something went wrong";
 }

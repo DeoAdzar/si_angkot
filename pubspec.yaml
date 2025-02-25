@@ -21,6 +21,7 @@ dependencies:
 # akan generate folder lib/gen dan seisinya dengan perintah dart run build_runner build -d
 # untuk mengenerate file assets, colors, dan fonts
 # agar lebih mudah untuk memanggil asset,fonts,dan colors di dalam aplikasi
+  vector_graphics: any
 flutter_gen:
   output: lib/gen/ # Optional (default: lib/gen/)
   line_length: 80 # Optional (default: 80)

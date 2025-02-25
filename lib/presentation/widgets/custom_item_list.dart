@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
