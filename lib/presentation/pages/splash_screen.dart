@@ -7,10 +7,11 @@ import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
-import '../../core/shared_prefference_helper.dart';
-
+import '../../data/local/shared_prefference_helper.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -78,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 GradientText(
                   Constant.APP_NAME,
-                  style: AppTextStyle.text3XLInter,
+                  style: AppTextStyle.text3XLInter.copyWith(fontSize: 32),
                   gradientType: GradientType.linear,
                   gradientDirection: GradientDirection.ltr,
                   colors: [
@@ -90,7 +91,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    MyAssets.png.iconDinasPerhubungan.image(width: 17, height: 20),
+                    MyAssets.png.iconDinasPerhubungan
+                        .image(width: 17, height: 20),
                     SizedBox(width: 4),
                     GradientText(
                       Constant.DINAS_PERHUBUNGAN,
