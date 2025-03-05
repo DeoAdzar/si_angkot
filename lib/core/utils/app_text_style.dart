@@ -68,6 +68,7 @@ class AppTextStyle {
     overflow: TextOverflow.ellipsis,
   );
 
+// INTER
   static TextStyle textHeadingSMInter = const TextStyle(
     fontFamily: familyFontInter,
     fontSize: 14,

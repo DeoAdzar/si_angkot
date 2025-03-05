@@ -6,6 +6,9 @@ class Constant {
 
   static const String ROLE_KEY = 'user_role';
   static const String USER_ID_KEY = 'user_id';
+  static const String USER_NAME_KEY = 'user_name';
+  static const String USER_EMAIL_KEY = 'user_email';
+  static const String USER_IMAGE_KEY = 'user_image';
   static const String TOKEN_KEY = 'token';
 
   static const Duration SPLASH_DURATION = Duration(seconds: 2);
@@ -19,6 +22,9 @@ class Constant {
 
   static const String FULL_NAME = "Nama Lengkap";
   static const String EMAIL = "Email";
+  static const String NISN = "NISN";
+  static const String SCHOOL = "Sekolah";
+  static const String SCHOOL_ADDRESS = "Alamat Sekolah";
   static const String PASSWORD = "Password";
   static const String PHONE_NUMBER = "Nomor HP";
   static const String ADDRESS = "Alamat";
@@ -32,9 +38,11 @@ class Constant {
   static const String WELCOME_DESCRIPTION_DRIVER =
       "Semangat bekerja, Hati - hati dijalan";
   static const String SETTING = "Pengaturan";
-  static const String SETTING_PROFILE = "Pengaturan Profil";
-  static const String FORM_REGISTER = "Formulir Pendaftaran";
-  static const String HISTORY = "Riwayat";
+  static const String SETTING_PROFILE = "Pengaturan\nProfil";
+  static const String PROFILE_STUDENT = "Profil Anak";
+  static const String FORM_REGISTER = "Formulir\nPendaftaran";
+  static const String HISTORY_ID = "Riwayat";
+  static const String HISTORY_EN = "History";
 
   static const String REGISTER_CHILDREN = "Pendaftaran Anak";
   static const String STATUS = "Status";

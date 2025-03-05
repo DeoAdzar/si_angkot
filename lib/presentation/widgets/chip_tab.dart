@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:si_angkot/core/utils/app_text_style.dart';
+import 'package:si_angkot/gen/colors.gen.dart';
 import 'package:si_angkot/presentation/controller/tab_controller.dart';
 
 class ChipTab extends StatelessWidget {
@@ -11,28 +13,46 @@ class ChipTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final TabControllerX tabController = Get.find<TabControllerX>();
 
-    return Obx(() => SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
+    return Obx(() => Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: MyColors.backgroundTabChips,
+            borderRadius: BorderRadius.circular(50),
+          ),
           child: Row(
-            children: List.generate(tabs.length, (index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: ChoiceChip(
-                  label: Text(tabs[index]),
-                  selected: tabController.selectedTab.value == index,
-                  onSelected: (bool selected) => tabController.changeTab(index),
-                  selectedColor: Colors.white,
-                  backgroundColor: Colors.grey.shade200,
-                  labelStyle: TextStyle(
-                    color: tabController.selectedTab.value == index
-                        ? Colors.black
-                        : Colors.grey,
-                  ),
-                ),
-              );
-            }),
+            children: [
+              for (int i = 0; i < tabs.length; i++)
+                _buildTabItem(tabs[i], i, tabController),
+            ],
           ),
         ));
+  }
+
+  Widget _buildTabItem(String title, int index, TabControllerX tabController) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => tabController.selectedTab.value = index,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: tabController.selectedTab.value == index
+                ? Colors.white
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: Text(
+            title,
+            style: AppTextStyle.textBASEPoppins.copyWith(
+              fontWeight: FontWeight.w600,
+              color: tabController.selectedTab.value == index
+                  ? MyColors.fontColorPrimary
+                  : MyColors.fontColorSecondary,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 // use this widget like this

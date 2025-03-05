@@ -32,6 +32,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/add.svg
   SvgGenImage get add => const SvgGenImage('assets/svg/add.svg');
 
+  /// File path: assets/svg/arrow_left.svg
+  SvgGenImage get arrowLeft => const SvgGenImage('assets/svg/arrow_left.svg');
+
   /// File path: assets/svg/arrow_right.svg
   SvgGenImage get arrowRight => const SvgGenImage('assets/svg/arrow_right.svg');
 
@@ -40,6 +43,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/edit.svg
   SvgGenImage get edit => const SvgGenImage('assets/svg/edit.svg');
+
+  /// File path: assets/svg/history.svg
+  SvgGenImage get history => const SvgGenImage('assets/svg/history.svg');
 
   /// File path: assets/svg/password_off.svg
   SvgGenImage get passwordOff =>
@@ -60,9 +66,11 @@ class $AssetsSvgGen {
   /// List of all assets
   List<SvgGenImage> get values => [
     add,
+    arrowLeft,
     arrowRight,
     clock,
     edit,
+    history,
     passwordOff,
     passwordOn,
     settings,

@@ -16,19 +16,58 @@ class LoginController extends GetxController {
       isLoading = true;
       update(); // Rebuild hanya widget yang pakai GetBuilder
 
-      final response = await loginRepository.login(email, password);
-      if (response.code == 200) {
-        loginModel = response.data;
-        ApiService().setToken(response.data?.token);
-        if (response.data?.role == "driver") {
-          Get.offAllNamed('/driver-home');
-        } else if (response.data?.role == "parent") {
-          Get.offAllNamed('/parent-home');
-        } else {
-          Get.offAllNamed("/student-home");
-        }
+      // final response = await loginRepository.login(email, password);
+      // if (response.code == 200) {
+      //   loginModel = response.data;
+      //   ApiService().setToken(response.data?.token);
+      //   if (response.data?.role == "driver") {
+      //     Get.offAllNamed('/driver-home');
+      //   } else if (response.data?.role == "parent") {
+      //     Get.offAllNamed('/parent-home');
+      //   } else {
+      //     Get.offAllNamed("/student-home");
+      //   }
+      // } else {
+      //   AppUtils.showSnackbar("Login gagal", response.message, isError: true);
+      // }
+      if (email.isEmpty || password.isEmpty) {
+        var isAllEmpty = email.isEmpty && password.isEmpty;
+        var message = isAllEmpty
+            ? "${Constant.EMAIL} dan ${Constant.PASSWORD}"
+            : email.isEmpty
+                ? Constant.EMAIL
+                : Constant.PASSWORD;
+        AppUtils.showSnackbar(
+            "Isian tidak boleh kosong", "$message tidak boleh kosong",
+            isError: true);
+        return;
       } else {
-        AppUtils.showSnackbar("Login gagal", response.message, isError: true);
+        //dummy login
+        if (email == "driver" && password == "driver") {
+          Get.offAllNamed('/driver-home');
+        } else if (email == "parent" && password == "parent") {
+          Get.offAllNamed('/parent-home');
+        } else if (email == "student" && password == "student") {
+          Get.offAllNamed("/student-home");
+        } else {
+          AppUtils.showSnackbar("Login gagal", "Email atau password salah",
+              isError: true);
+        }
+
+        // final response = await loginRepository.login(email, password);
+        // if (response.code == 200) {
+        //   loginModel = response.data;
+        //   ApiService().setToken(response.data?.token);
+        //   if (response.data?.role == "driver") {
+        //     Get.offAllNamed('/driver-home');
+        //   } else if (response.data?.role == "parent") {
+        //     Get.offAllNamed('/parent-home');
+        //   } else {
+        //     Get.offAllNamed("/student-home");
+        //   }
+        // } else {
+        //   AppUtils.showSnackbar("Login gagal", response.message, isError: true);
+        // }
       }
     } catch (e) {
       print(e.toString());

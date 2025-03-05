@@ -25,11 +25,11 @@ class MyColors {
   /// Color: #33FFCC00
   static const Color backgroundWarning = Color(0x33FFCC00);
 
-  /// Color: #EDF3F7
-  static const Color borderInputText = Color(0xFFEDF3F7);
+  /// Color: #33EDF3F7
+  static const Color borderInputText = Color(0x33EDF3F7);
 
-  /// Color: #AAAAAA
-  static const Color borderInputTextSecondary = Color(0xFFAAAAAA);
+  /// Color: #ABABAB
+  static const Color borderInputTextSecondary = Color(0xFFABABAB);
 
   /// Color: #FFFFFF
   static const Color colorWhite = Color(0xFFFFFFFF);
