@@ -16,4 +16,7 @@
     <color name="border_input_text">#33EDF3F7</color> <!-- 20% opacity -->
     <color name="border_input_text_secondary">#ABABAB</color> <!-- 20% opacity -->
     <color name="icon_color_1E1E1E">#1e1e1e</color>
+    <color name="bottom_nav_icon_color_unselected">#68696D</color>
+    <color name="bottom_nav_font_color_unselected">#a4a4a6</color>
+    <color name="background_chip_duty">#dbdbdb</color>
 </resources>

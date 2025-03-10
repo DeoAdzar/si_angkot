@@ -6,7 +6,7 @@ import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/core/utils/app_utils.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
-import 'package:si_angkot/presentation/controller/parent/parent_controller.dart';
+import 'package:si_angkot/presentation/controller/parent_controller.dart';
 import 'package:si_angkot/presentation/widgets/custom_gradient_button.dart';
 import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
 

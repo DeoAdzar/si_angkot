@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:si_angkot/presentation/pages/auth/register_screen.dart';
 import 'package:si_angkot/presentation/pages/auth/login_screen.dart';
 import 'package:si_angkot/presentation/pages/driver/driver_home_screen.dart';
+import 'package:si_angkot/presentation/pages/driver/main/main_scan_view.dart';
 import 'package:si_angkot/presentation/pages/parent/parent_home_screen.dart';
 import 'package:si_angkot/presentation/pages/parent/register_student_screen.dart';
 import 'package:si_angkot/presentation/pages/splash_screen.dart';
@@ -15,6 +16,7 @@ class AppRoutes {
   static const String driver = '/driver-home';
   static const String parent = '/parent-home';
   static const String parentFormRegister = '/parent-form-register';
+  static const String driverBaseScan = '/driver-base-scan';
 
   static final List<GetPage> pages = [
     GetPage(name: splash, page: () => SplashScreen()),
@@ -26,6 +28,7 @@ class AppRoutes {
 
     //Driver
     GetPage(name: driver, page: () => DriverHomeScreen()),
+    GetPage(name: driverBaseScan, page: () => MainScanView()),
 
     //Parent
     GetPage(name: parent, page: () => ParentHomeScreen()),

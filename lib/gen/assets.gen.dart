@@ -38,8 +38,30 @@ class $AssetsSvgGen {
   /// File path: assets/svg/arrow_right.svg
   SvgGenImage get arrowRight => const SvgGenImage('assets/svg/arrow_right.svg');
 
+  /// File path: assets/svg/bottom_nav_history.svg
+  SvgGenImage get bottomNavHistory =>
+      const SvgGenImage('assets/svg/bottom_nav_history.svg');
+
+  /// File path: assets/svg/bottom_nav_home.svg
+  SvgGenImage get bottomNavHome =>
+      const SvgGenImage('assets/svg/bottom_nav_home.svg');
+
+  /// File path: assets/svg/bottom_nav_scan.svg
+  SvgGenImage get bottomNavScan =>
+      const SvgGenImage('assets/svg/bottom_nav_scan.svg');
+
+  /// File path: assets/svg/bottom_nav_settings.svg
+  SvgGenImage get bottomNavSettings =>
+      const SvgGenImage('assets/svg/bottom_nav_settings.svg');
+
+  /// File path: assets/svg/checklist.svg
+  SvgGenImage get checklist => const SvgGenImage('assets/svg/checklist.svg');
+
   /// File path: assets/svg/clock.svg
   SvgGenImage get clock => const SvgGenImage('assets/svg/clock.svg');
+
+  /// File path: assets/svg/cross.svg
+  SvgGenImage get cross => const SvgGenImage('assets/svg/cross.svg');
 
   /// File path: assets/svg/edit.svg
   SvgGenImage get edit => const SvgGenImage('assets/svg/edit.svg');
@@ -68,7 +90,13 @@ class $AssetsSvgGen {
     add,
     arrowLeft,
     arrowRight,
+    bottomNavHistory,
+    bottomNavHome,
+    bottomNavScan,
+    bottomNavSettings,
+    checklist,
     clock,
+    cross,
     edit,
     history,
     passwordOff,

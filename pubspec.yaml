@@ -21,6 +21,7 @@ dependencies:
   qr_code_scanner_plus: ^2.0.10+1
   circle_avatar: ^1.0.1
   image_picker: ^1.1.2
+  hugeicons: ^0.0.7
 
 # akan generate folder lib/gen dan seisinya dengan perintah dart run build_runner build -d
 # untuk mengenerate file assets, colors, dan fonts
