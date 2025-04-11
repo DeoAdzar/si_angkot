@@ -6,6 +6,7 @@ import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/core/utils/app_utils.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
+import 'package:si_angkot/presentation/controller/auth_controller.dart';
 import 'package:si_angkot/presentation/controller/parent_controller.dart';
 import 'package:si_angkot/presentation/widgets/custom_gradient_button.dart';
 import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
@@ -13,6 +14,7 @@ import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
 class RegisterStudentScreen extends StatelessWidget {
   RegisterStudentScreen({super.key});
   final ParentController controller = Get.put(ParentController());
+  final AuthController authController = Get.put(AuthController());
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController addressSchoolController = TextEditingController();
@@ -154,12 +156,52 @@ class RegisterStudentScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            CustomGradientButton(
-              text: Constant.REGISTER,
-              onPressed: () {
-                AppUtils.showSnackbar("Register Student", "Register");
+            Obx(
+              () {
+                if (authController.isLoading.value) {
+                  return CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(MyColors.primaryColor),
+                  );
+                } else {
+                  return CustomGradientButton(
+                    text: Constant.REGISTER,
+                    onPressed: () async {
+                      bool register = await authController.registerStudent(
+                        email: emailController.text,
+                        password: passwordController.text,
+                        name: nameController.text,
+                        phone: phoneController.text,
+                        address: addressSchoolController.text,
+                        nisn: nisnController.text,
+                        school: schoolController.text,
+                        schoolAddress: addressSchoolController.text,
+                        picture: controller.imageFile.value != null
+                            ? controller.imageFile.value!.path
+                            : '',
+                      );
+                      if (register) {
+                        AppUtils.showSnackbar(
+                            "Success", "Berhasil mendaftarkan student");
+                        controller.resetDataInfo();
+                        controller.imageFile.value = null;
+                        nameController.clear();
+                        addressSchoolController.clear();
+                        schoolController.clear();
+                        nisnController.clear();
+                        phoneController.clear();
+                        emailController.clear();
+                        passwordController.clear();
+                      } else {
+                        AppUtils.showSnackbar(
+                            "Failed", "Gagal mendaftarkan student",
+                            isError: true);
+                      }
+                    },
+                  );
+                }
               },
-            )
+            ),
           ],
         ),
       ),

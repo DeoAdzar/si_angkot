@@ -1,12 +1,37 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:si_angkot/core/app_routes.dart';
 import 'package:si_angkot/core/constants.dart';
+import 'package:si_angkot/core/utils/app_utils.dart';
 
 class DriverController extends GetxController {
+  //---------------SCANNER----------------
+  var currentIndex = 0.obs;
+
+  void changePage(int index) {
+    currentIndex.value = index;
+  }
+
   var dutyStatusList = <String>[Constant.DELIVER, Constant.DEPARTURE];
+
+  var nameTemp = "".obs;
+  var pictTemp = "".obs;
+  var addressTemp = "".obs;
+  var phoneTemp = "".obs;
+  var emailTemp = "".obs;
 
   var selectedStatusIndex = 0.obs;
   var bottomNavIndex = 0.obs;
+
+  void setDataInfo(
+      String name, String pict, String address, String phone, String email) {
+    nameTemp.value = name;
+    addressTemp.value = address;
+    pictTemp.value = pict;
+    phoneTemp.value = phone;
+    emailTemp.value = email;
+  }
 
   var carRoutesDeliver = <String>[
     'Bok Malang',

@@ -39,4 +39,28 @@ class AppUtils {
   static void hideLoading() {
     if (Get.isDialogOpen ?? false) Get.back();
   }
+
+  static String generateTrackingId(String id) {
+    final DateTime now = DateTime.now();
+    final String formattedDate = "yymmddHHmm".replaceAllMapped(
+      RegExp(r'y|m|d|H|M'),
+      (match) {
+        switch (match[0]) {
+          case 'y':
+            return now.year.toString().substring(2, 4);
+          case 'm':
+            return now.month.toString().padLeft(2, '0');
+          case 'd':
+            return now.day.toString().padLeft(2, '0');
+          case 'H':
+            return now.hour.toString().padLeft(2, '0');
+          case 'M':
+            return now.minute.toString().padLeft(2, '0');
+          default:
+            return '';
+        }
+      },
+    );
+    return "$formattedDate$id";
+  }
 }

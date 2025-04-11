@@ -79,6 +79,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/settings.svg
   SvgGenImage get settings => const SvgGenImage('assets/svg/settings.svg');
 
+  /// File path: assets/svg/sign_out.svg
+  SvgGenImage get signOut => const SvgGenImage('assets/svg/sign_out.svg');
+
   /// File path: assets/svg/upload.svg
   SvgGenImage get upload => const SvgGenImage('assets/svg/upload.svg');
 
@@ -102,6 +105,7 @@ class $AssetsSvgGen {
     passwordOff,
     passwordOn,
     settings,
+    signOut,
     upload,
     userPlus,
   ];

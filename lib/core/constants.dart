@@ -8,6 +8,8 @@ class Constant {
   static const String USER_ID_KEY = 'user_id';
   static const String USER_NAME_KEY = 'user_name';
   static const String USER_EMAIL_KEY = 'user_email';
+  static const String USER_PHONE_KEY = 'user_phone';
+  static const String USER_ADDRESS_KEY = 'user_address';
   static const String USER_IMAGE_KEY = 'user_image';
   static const String TOKEN_KEY = 'token';
 
@@ -18,6 +20,7 @@ class Constant {
   static const String FORGOT_PASSWORD = "Lupa Kata Sandi?";
   static const String HOME = "Beranda";
   static const String CREATE_ACCOUNT = "Buat Akun";
+  static const String SAVE = "Simpan";
   static const String DOESNT_HAVE_ACCOUNT = "Belum punya akun?";
 
   static const String FULL_NAME = "Nama Lengkap";
@@ -29,8 +32,9 @@ class Constant {
   static const String PHONE_NUMBER = "Nomor HP";
   static const String ADDRESS = "Alamat";
 
-  static const String PARENT = "Orang Tua";
+  static const String PARENT = "Parent";
   static const String DRIVER = "Driver";
+  static const String STUDENT = "Student";
 
   static const String WELCOME = "Selamat Datang";
   static const String WELCOME_DESCRIPTION_PARENT =

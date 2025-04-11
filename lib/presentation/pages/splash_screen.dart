@@ -5,9 +5,8 @@ import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
+import 'package:si_angkot/presentation/controller/auth_controller.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-
-import '../../data/local/shared_prefference_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,6 +16,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final AuthController _authController = Get.find<AuthController>();
   double _opacity = 0.0;
 
   @override
@@ -27,22 +27,39 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _startAnimation() async {
     await Future.delayed(Duration(milliseconds: 500));
+
+    if (!mounted) return;
     setState(() {
       _opacity = 1.0;
     });
 
-    await Future.delayed(Constant.SPLASH_DURATION);
-    setState(() {
-      _opacity = 0.0;
-    });
+    try {
+      await _authController.initialAuthCheck();
 
-    await Future.delayed(Duration(milliseconds: 500));
-    _navigateToNextScreen();
+      await Future.delayed(Constant.SPLASH_DURATION);
+
+      if (!mounted) return;
+      setState(() {
+        _opacity = 0.0;
+      });
+
+      await Future.delayed(Duration(milliseconds: 500));
+
+      _navigateToNextScreen();
+    } catch (e) {
+      // Handle any errors during initial auth check
+      print('Error during initial auth check: $e');
+
+      if (!mounted) return;
+      _navigateToNextScreen();
+    }
   }
 
-  void _navigateToNextScreen() async {
-    String? role = SharedPreferencesHelper.getString(Constant.ROLE_KEY);
-    if (role != null) {
+  void _navigateToNextScreen() {
+    if (!mounted) return;
+
+    if (_authController.firebaseUser != null) {
+      final role = _authController.currentUser?.role ?? '';
       Get.offNamed(_getRouteForRole(role));
     } else {
       Get.offNamed(AppRoutes.login);
@@ -50,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   String _getRouteForRole(String role) {
-    switch (role) {
+    switch (role.toLowerCase()) {
       case 'student':
         return AppRoutes.student;
       case 'driver':
