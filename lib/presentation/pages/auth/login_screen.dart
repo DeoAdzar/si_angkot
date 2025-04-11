@@ -3,12 +3,13 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:si_angkot/core/app_routes.dart';
 import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/core/utils/app_utils.dart';
 import 'package:si_angkot/core/utils/helper/size_helper.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
-import 'package:si_angkot/presentation/controller/auth/login_controller.dart';
+import 'package:si_angkot/presentation/controller/auth_controller.dart';
 import 'package:si_angkot/presentation/widgets/custom_gradient_button.dart';
 import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -16,7 +17,7 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../../gen/colors.gen.dart';
 
 class LoginScreen extends StatelessWidget {
-  final LoginController loginController = Get.put(LoginController());
+  final AuthController authController = Get.put(AuthController());
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -95,20 +96,22 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      GetBuilder<LoginController>(
-                        builder: (controller) {
-                          return controller.isLoading
-                              ? CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      MyColors.primaryColor),
-                                )
-                              : CustomGradientButton(
-                                  text: Constant.LOGIN,
-                                  onPressed: () {
-                                    controller.login(emailController.text,
-                                        passwordController.text);
-                                  },
-                                );
+                      Obx(
+                        () {
+                          if (authController.isLoading.value) {
+                            return CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  MyColors.primaryColor),
+                            );
+                          } else {
+                            return CustomGradientButton(
+                              text: Constant.LOGIN,
+                              onPressed: () {
+                                authController.login(emailController.text,
+                                    passwordController.text);
+                              },
+                            );
+                          }
                         },
                       ),
                     ],
@@ -134,7 +137,7 @@ class LoginScreen extends StatelessWidget {
                           fontWeight: FontWeight.w700),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Get.toNamed('/base-register');
+                          Get.toNamed(AppRoutes.baseRegister);
                         },
                     )
                   ],

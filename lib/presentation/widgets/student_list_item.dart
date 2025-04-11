@@ -6,7 +6,7 @@ import 'package:si_angkot/gen/colors.gen.dart';
 class StudentListItem extends StatelessWidget {
   final String name;
   final String school;
-  final String status;
+  final bool status;
   final String profileImageUrl;
   final VoidCallback onTap;
 
@@ -80,14 +80,14 @@ class StudentListItem extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: status == 'Terdaftar'
+                      color: status
                           ? MyColors.backgroundSuccess
                           : MyColors.backgroundWarning,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(status,
+                    child: Text(status ? "Terdaftar" : "Menunggu Verifikasi",
                         style: AppTextStyle.textBASEPoppins.copyWith(
-                          color: status == 'Terdaftar'
+                          color: status
                               ? MyColors.fontColorSuccess
                               : MyColors.fontColorWarning,
                           fontWeight: FontWeight.w500,

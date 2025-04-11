@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
-import 'package:si_angkot/data/local/shared_prefference_helper.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
 
 class QRCard extends StatelessWidget {
+  final String id;
+  const QRCard({super.key, required this.id});
   @override
   Widget build(BuildContext context) {
-    String? id = SharedPreferencesHelper.getString(Constant.USER_ID_KEY);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
@@ -35,7 +35,7 @@ class QRCard extends StatelessWidget {
             ),
             SizedBox(height: 10),
             QrImageView(
-              data: id ?? '',
+              data: id,
               version: QrVersions.auto,
               size: 250.0,
             ),

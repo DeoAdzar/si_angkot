@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:si_angkot/core/app_routes.dart';
 import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/core/utils/app_utils.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
-import 'package:si_angkot/presentation/controller/parent/parent_controller.dart';
+import 'package:si_angkot/presentation/controller/auth_controller.dart';
+import 'package:si_angkot/presentation/controller/parent_controller.dart';
 import 'package:si_angkot/presentation/widgets/gradient_header.dart';
+import 'package:si_angkot/presentation/widgets/logout_dialog_confirmation.dart';
 import 'package:si_angkot/presentation/widgets/menu_button.dart';
 import 'package:si_angkot/presentation/widgets/student_list_item.dart';
 
 class ParentHomeScreen extends StatelessWidget {
   ParentHomeScreen({super.key});
   final ParentController controller = Get.put(ParentController());
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +26,18 @@ class ParentHomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GradientHeader(
-            name: 'Sri',
+            name: authController.currentUser?.name ?? 'Guest',
             subtitle: 'Monitoring anak mu sedang dimana',
-            imageUrl:
+            imageUrl: authController.currentUser?.picture ??
                 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png',
+            onSignOut: () {
+              LogoutDialogConfirmation.show(
+                onSignOut: () {
+                  authController.logout();
+                  // AppUtils.showSnackbar("Logout", "Berhasil Logout");
+                },
+              );
+            },
           ),
           SizedBox(height: 20),
           Padding(
@@ -40,7 +52,7 @@ class ParentHomeScreen extends StatelessWidget {
                       colorFilter: ColorFilter.mode(
                           MyColors.primaryColor, BlendMode.srcIn)),
                   label: Constant.SETTING_PROFILE,
-                  onTap: () => AppUtils.showSnackbar("OnClick", "Settings"),
+                  onTap: () => Get.toNamed(AppRoutes.parentSetting),
                 ),
                 SizedBox(width: 20),
                 MenuButton(
@@ -50,7 +62,7 @@ class ParentHomeScreen extends StatelessWidget {
                       colorFilter: ColorFilter.mode(
                           MyColors.primaryColor, BlendMode.srcIn)),
                   label: Constant.FORM_REGISTER,
-                  onTap: () => Get.toNamed('/parent-form-register'),
+                  onTap: () => Get.toNamed(AppRoutes.parentFormRegister),
                 ),
               ],
             ),
@@ -70,26 +82,32 @@ class ParentHomeScreen extends StatelessWidget {
               child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Obx(() {
-              if (controller.studentsList.isEmpty) {
-                return const Center(child: Text("No users found"));
+              final linkedStudents = authController.linkedStudents;
+              if (authController.linkedStudents.isEmpty) {
+                return const Center(
+                    child: Text("Belum ada student yang terdaftar"));
               }
-              return RefreshIndicator(
-                onRefresh: () async => controller.fetchStudentsDummy(),
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  itemCount: controller.studentsList.length,
-                  itemBuilder: (context, index) {
-                    final student = controller.studentsList[index];
-                    return StudentListItem(
-                      name: student.name!,
-                      school: student.school!,
-                      status: student.status!,
-                      profileImageUrl: student.pict!,
-                      onTap: () =>
-                          AppUtils.showSnackbar("OnClick", "${student.name}"),
-                    );
-                  },
-                ),
+              return ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                itemCount: linkedStudents.length,
+                itemBuilder: (context, index) {
+                  final student = linkedStudents[index];
+
+                  // Menggunakan data dari model
+                  return StudentListItem(
+                    name: student.name,
+                    school: student.school ?? 'Unknown School',
+                    status: student.isVerify ?? false,
+                    profileImageUrl: student.picture,
+                    onTap: () {
+                      // Navigasi ke halaman detail student atau tindakan lainnya
+                      AppUtils.showSnackbar(
+                          "Student Select", "${student.name} selected",
+                          isError: false);
+                      // Get.toNamed(AppRoutes.studentDetail, arguments: student);
+                    },
+                  );
+                },
               );
             }),
           ))

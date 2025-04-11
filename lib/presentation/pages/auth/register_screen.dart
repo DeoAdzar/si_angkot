@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
-import 'package:si_angkot/presentation/controller/auth/register_controller.dart';
+import 'package:si_angkot/presentation/controller/auth_controller.dart';
 import 'package:si_angkot/presentation/controller/tab_controller.dart';
 import 'package:si_angkot/presentation/widgets/chip_tab.dart';
 import 'package:si_angkot/presentation/widgets/custom_gradient_button.dart';
@@ -12,7 +12,7 @@ import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
 
-  final RegisterController registerController = Get.put(RegisterController());
+  final AuthController authController = Get.put(AuthController());
   final TabControllerX tabController = Get.put(TabControllerX());
 
   final TextEditingController nameController = TextEditingController();
@@ -93,7 +93,7 @@ class RegisterScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Obx(
                   () {
-                    if (registerController.isLoading.value) {
+                    if (authController.isLoading.value) {
                       return CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
                             MyColors.primaryColor),
@@ -107,13 +107,13 @@ class RegisterScreen extends StatelessWidget {
                           //     tabController.selectedTab.value == 0
                           //         ? Constant.PARENT
                           //         : Constant.DRIVER);
-                          registerController.register(
-                            nameController.text,
-                            addressController.text,
-                            phoneController.text,
-                            emailController.text,
-                            passwordController.text,
-                            tabController.selectedTab.value == 0
+                          authController.register(
+                            name: nameController.text,
+                            address: addressController.text,
+                            phone: phoneController.text,
+                            email: emailController.text,
+                            password: passwordController.text,
+                            role: tabController.selectedTab.value == 0
                                 ? Constant.PARENT
                                 : Constant.DRIVER,
                           );

@@ -13,6 +13,9 @@ import 'package:flutter/material.dart';
 class MyColors {
   MyColors._();
 
+  /// Color: #dbdbdb
+  static const Color backgroundChipDuty = Color(0xFFDBDBDB);
+
   /// Color: #33FF3B30
   static const Color backgroundError = Color(0x33FF3B30);
 
@@ -30,6 +33,12 @@ class MyColors {
 
   /// Color: #ABABAB
   static const Color borderInputTextSecondary = Color(0xFFABABAB);
+
+  /// Color: #a4a4a6
+  static const Color bottomNavFontColorUnselected = Color(0xFFA4A4A6);
+
+  /// Color: #68696D
+  static const Color bottomNavIconColorUnselected = Color(0xFF68696D);
 
   /// Color: #FFFFFF
   static const Color colorWhite = Color(0xFFFFFFFF);

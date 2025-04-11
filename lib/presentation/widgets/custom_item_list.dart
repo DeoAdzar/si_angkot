@@ -5,14 +5,12 @@ import 'package:si_angkot/gen/colors.gen.dart';
 
 class CustomItemList extends StatelessWidget {
   final String title;
-  final String subtitle;
   final String? time;
   final VoidCallback? onTap;
 
   const CustomItemList({
     super.key,
     required this.title,
-    required this.subtitle,
     this.time,
     this.onTap,
   });
@@ -29,24 +27,17 @@ class CustomItemList extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: AppTextStyle.textBASEPoppins
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: MyColors.fontColorListItem,
-                  ),
-                ),
+                Text(title, style: AppTextStyle.textBASEPoppins),
               ],
             ),
             if (time != null)
               Row(
                 children: [
-                  MyAssets.svg.clock.svg(width: 18, height: 18, colorFilter: ColorFilter.mode(MyColors.iconColor1E1E1E, BlendMode.srcIn)),
+                  MyAssets.svg.clock.svg(
+                      width: 18,
+                      height: 18,
+                      colorFilter: ColorFilter.mode(
+                          MyColors.iconColor1E1E1E, BlendMode.srcIn)),
                   const SizedBox(width: 6),
                   Text(
                     time!,
@@ -59,7 +50,11 @@ class CustomItemList extends StatelessWidget {
               )
             else
               // Icon(MyAssets.svg.arrowRight as IconData ,color: MyColors.iconColor1E1E1E),
-              MyAssets.svg.arrowRight.svg(width: 18,height: 18, colorFilter: ColorFilter.mode(MyColors.iconColor1E1E1E, BlendMode.srcIn))
+              MyAssets.svg.arrowRight.svg(
+                  width: 18,
+                  height: 18,
+                  colorFilter: ColorFilter.mode(
+                      MyColors.iconColor1E1E1E, BlendMode.srcIn))
           ],
         ),
       ),
