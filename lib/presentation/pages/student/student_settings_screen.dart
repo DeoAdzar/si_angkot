@@ -10,7 +10,7 @@ class StudentSettingScreen extends StatefulWidget {
 }
 
 class _StudentSettingScreenState extends State<StudentSettingScreen> {
-  final StudentController studentController = Get.find<StudentController>();
+  final StudentController studentController = Get.put(StudentController());
   final AuthController authController = Get.find<AuthController>();
 
   late TextEditingController nameController;
@@ -162,14 +162,6 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
                       borderColor: MyColors.borderInputText,
                       keyboardType: TextInputType.emailAddress,
                     ),
-                    // CustomTextField(
-                    //   controller: passwordController,
-                    //   hintText: Constant.PASSWORD,
-                    //   label: Constant.PASSWORD,
-                    //   borderColor: MyColors.borderInputText,
-                    //   keyboardType: TextInputType.visiblePassword,
-                    //   isPassword: true,
-                    // ),
                   ],
                 ),
               ),
