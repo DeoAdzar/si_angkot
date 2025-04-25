@@ -84,37 +84,33 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: studentController.pickImage,
-                      child: Obx(
-                        () => Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 55,
-                              backgroundColor: Colors.grey[300],
-                              child: Icon(Icons.person,
-                                  size: 50, color: Colors.white),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
-                                padding: EdgeInsets.all(4),
-                                child: MyAssets.svg.upload.svg(
-                                    width: 24,
-                                    height: 24,
-                                    colorFilter: ColorFilter.mode(
-                                        MyColors.fontColorSecondary,
-                                        BlendMode.srcIn)),
-                              ),
-                            ),
-                          ],
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 55,
+                          backgroundColor: Colors.grey[300],
+                          child:
+                              Icon(Icons.person, size: 50, color: Colors.white),
                         ),
-                      ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            padding: EdgeInsets.all(4),
+                            child: MyAssets.svg.upload.svg(
+                                width: 24,
+                                height: 24,
+                                colorFilter: ColorFilter.mode(
+                                    MyColors.fontColorSecondary,
+                                    BlendMode.srcIn)),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 20),
                     CustomTextField(
