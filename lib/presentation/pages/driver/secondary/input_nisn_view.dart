@@ -5,6 +5,7 @@ import 'package:si_angkot/presentation/controller/driver_controller.dart';
 
 class InputNisnView extends GetView<DriverController> {
   final DriverController driverController = Get.find<DriverController>();
+  final AuthController authController = Get.find<AuthController>();
   final TextEditingController nisnController = TextEditingController();
 
   InputNisnView({super.key});
@@ -90,9 +91,9 @@ class InputNisnView extends GetView<DriverController> {
                         if (nisn.isNotEmpty) {
                           // Submit action here
                           // print("Submitted NISN: $nisn");
-                          AppUtils.showSnackbar(
-                            "Berhasil",
-                            "NISN $nisn berhasil ditambahkan",
+                          driverController.findNISN(
+                            nisn,
+                            authController.currentUser?.userId ?? "",
                           );
                         }
                       },

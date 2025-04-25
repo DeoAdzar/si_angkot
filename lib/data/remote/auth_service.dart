@@ -323,7 +323,7 @@ class AuthService {
   }
 
   Future<String?> getUserIdByNISN(String nisn) async {
-    final databaseRef = FirebaseDatabase.instance.ref().child('users');
+    final databaseRef = FirebaseDatabase.instance.ref().child('Users');
     final snapshot = await databaseRef.get();
 
     if (snapshot.exists) {
