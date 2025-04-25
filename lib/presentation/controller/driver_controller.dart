@@ -120,7 +120,7 @@ class DriverController extends GetxController {
       await trackingService.saveHistory(
         studentId: studentId,
         driverId: driverID,
-        dutyType: dutyType.value,
+        dutyType: deliveryType.value,
         trackingId: trackingId.value,
         onResult: (isSuccess, message) {
           if (isSuccess) {

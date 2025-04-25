@@ -95,6 +95,7 @@ class InputNisnView extends GetView<DriverController> {
                             nisn,
                             authController.currentUser?.userId ?? "",
                           );
+                          nisnController.clear();
                         }
                       },
                       borderRadius: BorderRadius.circular(50),
