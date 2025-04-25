@@ -113,7 +113,7 @@ class RegisterStudentScreen extends StatelessWidget {
                       hintText: Constant.NISN,
                       label: Constant.NISN,
                       borderColor: MyColors.borderInputText,
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.number,
                     ),
                     CustomTextField(
                       controller: schoolController,

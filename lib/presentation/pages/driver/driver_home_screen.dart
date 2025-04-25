@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:si_angkot/core.dart';
 import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
@@ -33,6 +34,23 @@ class DriverHomeScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _checkTrackingIdAndNavigate(int index) async {
+    final trackingId =
+        SharedPreferencesHelper.getString(Constant.TRACKING_ID_KEY);
+
+    // Check if trackingId is null or empty
+    if (trackingId == null || trackingId.isEmpty) {
+      // Show Snackbar
+      AppUtils.showSnackbar(
+          "Oops!", "Mulai tugas anda terlebih dahulu, baru bisa scan QR",
+          isError: true);
+      // Prevent navigation to Scan QR page
+      return;
+    }
+    // Proceed to selected page if trackingId is valid
+    driverController.selectBottomNav(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -42,7 +60,12 @@ class DriverHomeScreen extends StatelessWidget {
           currentIndex:
               _getBottomNavIndex(driverController.bottomNavIndex.value),
           onTap: (index) {
-            driverController.selectBottomNav(index);
+            if (index == 1) {
+              // Check if trackingId is valid before navigating to Scan QR page
+              _checkTrackingIdAndNavigate(index);
+            } else {
+              driverController.selectBottomNav(index);
+            }
           },
           type: BottomNavigationBarType.fixed,
           selectedItemColor: MyColors.primaryColor,

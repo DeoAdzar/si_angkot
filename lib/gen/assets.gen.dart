@@ -18,12 +18,15 @@ class $AssetsPngGen {
   /// File path: assets/png/icon.png
   AssetGenImage get icon => const AssetGenImage('assets/png/icon.png');
 
+  /// File path: assets/png/icon_500.png
+  AssetGenImage get icon500 => const AssetGenImage('assets/png/icon_500.png');
+
   /// File path: assets/png/icon_dinas_perhubungan.png
   AssetGenImage get iconDinasPerhubungan =>
       const AssetGenImage('assets/png/icon_dinas_perhubungan.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [icon, iconDinasPerhubungan];
+  List<AssetGenImage> get values => [icon, icon500, iconDinasPerhubungan];
 }
 
 class $AssetsSvgGen {

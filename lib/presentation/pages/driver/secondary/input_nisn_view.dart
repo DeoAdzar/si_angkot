@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:si_angkot/core.dart';
 import 'package:si_angkot/presentation/controller/driver_controller.dart';
 
 class InputNisnView extends GetView<DriverController> {
+  final DriverController driverController = Get.find<DriverController>();
   final TextEditingController nisnController = TextEditingController();
 
   InputNisnView({super.key});

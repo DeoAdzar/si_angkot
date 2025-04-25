@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:si_angkot/core.dart';
-import 'package:si_angkot/core/constants.dart';
-import 'package:si_angkot/core/utils/app_text_style.dart';
-import 'package:si_angkot/core/utils/app_utils.dart';
-import 'package:si_angkot/data/local/shared_prefference_helper.dart';
-import 'package:si_angkot/gen/assets.gen.dart';
-import 'package:si_angkot/gen/colors.gen.dart';
-import 'package:si_angkot/presentation/widgets/custom_gradient_button.dart';
-import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
-import 'package:si_angkot/presentation/controller/student_controller.dart';
 
 class StudentSettingScreen extends StatefulWidget {
   StudentSettingScreen({super.key});
@@ -33,11 +23,12 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
 
   late TextEditingController phoneController;
 
+  late TextEditingController emailController;
+
   late TextEditingController addressController;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     nameController =
         TextEditingController(text: authController.currentUser?.name ?? "");
@@ -49,6 +40,8 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
         TextEditingController(text: authController.currentUser?.address ?? "");
     nisnController =
         TextEditingController(text: authController.currentUser?.nisn ?? "");
+    emailController =
+        TextEditingController(text: authController.currentUser?.email ?? "");
     schoolController =
         TextEditingController(text: authController.currentUser?.school ?? "");
   }
@@ -99,22 +92,8 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
                             CircleAvatar(
                               radius: 55,
                               backgroundColor: Colors.grey[300],
-                              backgroundImage:
-                                  studentController.imageFile.value != null
-                                      ? FileImage(
-                                          studentController.imageFile.value!)
-                                      : NetworkImage(
-                                          SharedPreferencesHelper.getString(
-                                                  Constant.USER_IMAGE_KEY) ??
-                                              "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png",
-                                        ) as ImageProvider<Object>,
-                              child: SharedPreferencesHelper.getString(
-                                              Constant.USER_IMAGE_KEY) ==
-                                          null &&
-                                      studentController.imageFile.value == null
-                                  ? Icon(Icons.person,
-                                      size: 50, color: Colors.white)
-                                  : null,
+                              child: Icon(Icons.person,
+                                  size: 50, color: Colors.white),
                             ),
                             Positioned(
                               bottom: 0,
@@ -179,6 +158,13 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
                       label: Constant.ADDRESS,
                       borderColor: MyColors.borderInputText,
                       keyboardType: TextInputType.streetAddress,
+                    ),
+                    CustomTextField(
+                      controller: emailController,
+                      hintText: Constant.EMAIL,
+                      label: Constant.EMAIL,
+                      borderColor: MyColors.borderInputText,
+                      keyboardType: TextInputType.emailAddress,
                     ),
                     // CustomTextField(
                     //   controller: passwordController,

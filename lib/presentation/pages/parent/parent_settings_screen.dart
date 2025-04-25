@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
 import 'package:si_angkot/core/utils/app_utils.dart';
-import 'package:si_angkot/data/local/shared_prefference_helper.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
+import 'package:si_angkot/presentation/controller/auth_controller.dart';
 import 'package:si_angkot/presentation/controller/parent_controller.dart';
 import 'package:si_angkot/presentation/widgets/custom_gradient_button.dart';
 import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
@@ -20,6 +20,7 @@ class ParentSettingsScreen extends StatefulWidget {
 
 class _ParentSettingsScreenState extends State<ParentSettingsScreen> {
   final ParentController parentController = Get.find<ParentController>();
+  final AuthController authController = Get.find<AuthController>();
 
   late TextEditingController nameController;
 
@@ -29,26 +30,25 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> {
 
   late TextEditingController emailController;
 
-  late TextEditingController passwordController;
+  // late TextEditingController passwordController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     nameController =
-        TextEditingController(text: parentController.nameTemp.value);
+        TextEditingController(text: authController.currentUser?.name ?? "");
     addressController =
-        TextEditingController(text: parentController.addressTemp.value);
+        TextEditingController(text: authController.currentUser?.address ?? "");
     phoneController =
-        TextEditingController(text: parentController.phoneTemp.value);
+        TextEditingController(text: authController.currentUser?.phone ?? "");
     emailController =
-        TextEditingController(text: parentController.emailTemp.value);
-    passwordController = TextEditingController();
+        TextEditingController(text: authController.currentUser?.email ?? "");
+    // passwordController = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("address : " + parentController.addressTemp.value);
     return Scaffold(
       backgroundColor: MyColors.colorWhite,
       appBar: AppBar(
@@ -88,26 +88,14 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> {
                     GestureDetector(
                       onTap: parentController.pickImage,
                       child: Obx(() {
-                        final imageFile = parentController.imageFile.value;
-                        final userImageUrl = SharedPreferencesHelper.getString(
-                            Constant.USER_IMAGE_KEY);
                         return Stack(
                           alignment: Alignment.center,
                           children: [
                             CircleAvatar(
                               radius: 55,
                               backgroundColor: Colors.grey[300],
-                              backgroundImage: imageFile != null
-                                  ? FileImage(imageFile)
-                                  : (userImageUrl != null &&
-                                          userImageUrl.isNotEmpty
-                                      ? NetworkImage(userImageUrl)
-                                      : null),
-                              child:
-                                  (userImageUrl == null || userImageUrl.isEmpty)
-                                      ? Icon(Icons.person,
-                                          size: 50, color: Colors.white)
-                                      : null,
+                              child: Icon(Icons.person,
+                                  size: 50, color: Colors.white),
                             ),
                             Positioned(
                               bottom: 0,
@@ -159,14 +147,14 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> {
                       borderColor: MyColors.borderInputText,
                       keyboardType: TextInputType.emailAddress,
                     ),
-                    CustomTextField(
-                      controller: passwordController,
-                      hintText: Constant.PASSWORD,
-                      label: Constant.PASSWORD,
-                      borderColor: MyColors.borderInputText,
-                      keyboardType: TextInputType.visiblePassword,
-                      isPassword: true,
-                    ),
+                    // CustomTextField(
+                    //   controller: passwordController,
+                    //   hintText: Constant.PASSWORD,
+                    //   label: Constant.PASSWORD,
+                    //   borderColor: MyColors.borderInputText,
+                    //   keyboardType: TextInputType.visiblePassword,
+                    //   isPassword: true,
+                    // ),
                   ],
                 ),
               ),

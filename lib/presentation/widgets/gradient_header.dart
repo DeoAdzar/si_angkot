@@ -44,9 +44,10 @@ class GradientHeader extends StatelessWidget {
                   width: 36,
                   height: 36,
                   child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.grey[300],
-                    backgroundImage: NetworkImage(imageUrl),
+                    radius: 24,
+                    backgroundColor: Colors.white,
+                    child:
+                        Icon(Icons.person, color: Colors.grey[400], size: 30),
                   ),
                 ),
                 GestureDetector(

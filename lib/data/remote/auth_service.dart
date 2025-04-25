@@ -321,4 +321,24 @@ class AuthService {
       return null;
     }
   }
+
+  Future<String?> getUserIdByNISN(String nisn) async {
+    final databaseRef = FirebaseDatabase.instance.ref().child('users');
+    final snapshot = await databaseRef.get();
+
+    if (snapshot.exists) {
+      final data = snapshot.value as Map<dynamic, dynamic>;
+
+      for (final entry in data.entries) {
+        final userId = entry.key;
+        final userData = entry.value as Map<dynamic, dynamic>;
+
+        if (userData['nisn'] == nisn) {
+          return userId;
+        }
+      }
+    }
+
+    return null; // jika tidak ditemukan
+  }
 }

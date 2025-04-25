@@ -259,6 +259,7 @@ class AuthController extends GetxController {
       UserModel newUser = UserModel(
         userId: user.uid,
         name: name,
+        email: email,
         phone: phone,
         address: address,
         role: role,
@@ -297,6 +298,7 @@ class AuthController extends GetxController {
         name: name,
         phone: phone,
         address: address,
+        email: email,
         role: Constant.STUDENT,
         picture: picture,
         trackingId: '',

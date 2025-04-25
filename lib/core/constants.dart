@@ -4,14 +4,7 @@ class Constant {
       'Sistem Monitoring Angkot\nDinas Perhubungan Madiun';
   static const String DINAS_PERHUBUNGAN = 'Dinas Perhubungan';
 
-  static const String ROLE_KEY = 'user_role';
-  static const String USER_ID_KEY = 'user_id';
-  static const String USER_NAME_KEY = 'user_name';
-  static const String USER_EMAIL_KEY = 'user_email';
-  static const String USER_PHONE_KEY = 'user_phone';
-  static const String USER_ADDRESS_KEY = 'user_address';
-  static const String USER_IMAGE_KEY = 'user_image';
-  static const String TOKEN_KEY = 'token';
+  static const String TRACKING_ID_KEY = 'tracking_id';
 
   static const Duration SPLASH_DURATION = Duration(seconds: 2);
 
@@ -70,8 +63,5 @@ class Constant {
   static const String DEPARTURE = "Berangkat";
   static const String ARRIVAL = "Pulang";
 
-  //API MESSAGE
-  // TODO change with your API base URL later
-  static const String BASE_URL = "https://yourapi.com/api/";
   static const String SOMETHING_WRONG = "Something went wrong";
 }

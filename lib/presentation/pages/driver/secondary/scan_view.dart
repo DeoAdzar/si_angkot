@@ -4,7 +4,9 @@ import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:si_angkot/core.dart';
 
 class ScanView extends GetView<DriverController> {
-  const ScanView({super.key});
+  ScanView({super.key});
+  final DriverController driverController = Get.put(DriverController());
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +17,15 @@ class ScanView extends GetView<DriverController> {
       controller = qrController;
       qrController.scannedDataStream.listen((scanData) async {
         controller?.pauseCamera();
-        AppUtils.showSnackbar(
-            "Scan Success", "Selamat datang ${scanData.code}");
+        if (scanData.code == null || scanData.code!.isEmpty) {
+          AppUtils.showSnackbar("Gagal", "QR tidak valid", isError: true);
+          controller?.resumeCamera();
+          return;
+        }
+        await driverController.updateTrackingIdStudent(
+          scanData.code.toString(),
+          authController.currentUser?.userId ?? "",
+        );
         await Future.delayed(Duration(seconds: 3));
         controller?.resumeCamera();
         // Lanjutkan ke screen lain atau proses hasil di sini

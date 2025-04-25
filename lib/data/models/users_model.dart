@@ -3,6 +3,7 @@ class UserModel {
   final String name;
   final String address;
   final String role;
+  final String email;
   final String picture;
   final String phone;
   final String? trackingId;
@@ -17,6 +18,7 @@ class UserModel {
     required this.address,
     required this.role,
     required this.picture,
+    required this.email,
     required this.phone,
     this.trackingId,
     this.isVerify,
@@ -31,6 +33,7 @@ class UserModel {
       name: map['name'] ?? '',
       address: map['address'] ?? '',
       role: map['role'] ?? 'user',
+      email: map['email'] ?? '',
       picture: map['picture'] ?? '',
       phone: map['phone'] ?? '',
       trackingId: map['trackingId'] ?? '',
@@ -46,6 +49,7 @@ class UserModel {
       'name': name,
       'address': address,
       'role': role,
+      'email': email,
       'picture': picture,
       'phone': phone,
       'trackingId': trackingId,
@@ -60,6 +64,7 @@ class UserModel {
     String? userId,
     String? name,
     String? phone,
+    String? email,
     String? address,
     String? role,
     String? picture,
@@ -74,6 +79,7 @@ class UserModel {
       name: name ?? this.name,
       phone: phone ?? this.phone,
       address: address ?? this.address,
+      email: email ?? this.email,
       role: role ?? this.role,
       picture: picture ?? this.picture,
       trackingId: trackingId ?? this.trackingId,

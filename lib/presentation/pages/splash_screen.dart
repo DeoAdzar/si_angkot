@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _startAnimation() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 100));
 
     if (!mounted) return;
     setState(() {
@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
         _opacity = 0.0;
       });
 
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 100));
 
       _navigateToNextScreen();
     } catch (e) {
@@ -55,9 +55,9 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  void _navigateToNextScreen() {
+  void _navigateToNextScreen() async {
     if (!mounted) return;
-
+    await Future.delayed(Duration(milliseconds: 1000));
     if (_authController.firebaseUser != null) {
       final role = _authController.currentUser?.role ?? '';
       Get.offNamed(_getRouteForRole(role));
