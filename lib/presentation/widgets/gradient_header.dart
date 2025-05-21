@@ -23,7 +23,7 @@ class GradientHeader extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.orange, Colors.amber],
+          colors: [MyColors.primaryColor, MyColors.secondaryColor],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

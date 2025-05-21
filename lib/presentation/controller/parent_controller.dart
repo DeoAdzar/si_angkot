@@ -1,10 +1,18 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:si_angkot/data/models/students_model.dart';
 
+import '../../data/remote/tracking_service.dart';
+
 class ParentController extends GetxController {
+  final TrackingService _trackingService = TrackingService();
+
+  final RxDouble latitude = 0.0.obs;
+  final RxDouble longitude = 0.0.obs;
+
   var studentsList = <StudentData>[].obs;
   var imageFile = Rx<File?>(null);
   var nameTemp = "".obs;
@@ -12,6 +20,29 @@ class ParentController extends GetxController {
   var addressTemp = "".obs;
   var phoneTemp = "".obs;
   var emailTemp = "".obs;
+
+  final RxInt selectedTabIndex = 0.obs;
+  final RxString studentTrackingId = ''.obs;
+  StreamSubscription<String?>? _trackingSubscription;
+
+  void listenToTrackingId(String userId) {
+    _trackingSubscription?.cancel(); // cancel jika ada stream sebelumnya
+    _trackingSubscription = _trackingService.streamTrackingId(userId).listen(
+      (id) {
+        print("Tracking : listent studentTrackingId: $id");
+        studentTrackingId.value = id ?? '';
+      },
+    );
+  }
+
+  void stopTrackingStream() {
+    _trackingSubscription?.cancel();
+    _trackingSubscription = null;
+  }
+
+  void changeTab(int index) {
+    selectedTabIndex.value = index;
+  }
 
   @override
   void dispose() {
@@ -42,5 +73,32 @@ class ParentController extends GetxController {
     if (pickedFile != null) {
       imageFile.value = File(pickedFile.path);
     }
+  }
+
+  void startTracking() {
+    final trackingId = studentTrackingId.value;
+    if (trackingId.isEmpty) {
+      stopTracking();
+      return;
+    }
+
+    _trackingService.listenToTracking(
+      trackingId: trackingId,
+      onLocationUpdate: (lat, long) {
+        latitude.value = lat;
+        longitude.value = long;
+      },
+    );
+  }
+
+  void stopTracking() {
+    _trackingService.stopListening();
+  }
+
+  @override
+  void onClose() {
+    stopTracking();
+    stopTrackingStream();
+    super.onClose();
   }
 }

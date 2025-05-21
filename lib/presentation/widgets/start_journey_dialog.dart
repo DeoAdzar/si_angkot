@@ -136,10 +136,10 @@ class StartJourneyDialog extends StatelessWidget {
                         "Error", "Pilih jenis pengantaran terlebih dahulu");
                     return;
                   }
+                  driverController.dutyType.value = "OnDuty";
                   await driverController.saveTrackingAndFetchRouteDetail(
                     authController.currentUser?.userId ?? '',
                   );
-                  driverController.dutyType.value = "OnDuty";
                   Get.back();
                 },
                 style: ElevatedButton.styleFrom(

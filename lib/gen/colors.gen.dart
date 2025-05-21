@@ -67,9 +67,9 @@ class MyColors {
   /// Color: #1e1e1e
   static const Color iconColor1E1E1E = Color(0xFF1E1E1E);
 
-  /// Color: #CF5F19
-  static const Color primaryColor = Color(0xFFCF5F19);
+  /// Color: #d0631d
+  static const Color primaryColor = Color(0xFFD0631D);
 
-  /// Color: #F1DB84
-  static const Color secondaryColor = Color(0xFFF1DB84);
+  /// Color: #efd573
+  static const Color secondaryColor = Color(0xFFEFD573);
 }

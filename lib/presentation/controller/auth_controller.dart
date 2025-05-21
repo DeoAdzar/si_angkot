@@ -116,6 +116,25 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> fetchLinkedStudents() async {
+    try {
+      isLoading.value = true;
+      // Batalkan subscription yang ada
+      _linkedStudentsSubscription?.cancel();
+
+      // Memulai kembali listener untuk mendapatkan data terbaru
+      _startLinkedStudentsListener();
+
+      // Tambahkan delay kecil agar refresh indicator bisa terlihat
+      await Future.delayed(const Duration(milliseconds: 800));
+    } catch (e) {
+      errorMessage.value = 'Failed to fetch linked students: ${e.toString()}';
+      AppUtils.showSnackbar("Error", "Failed to refresh data", isError: true);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   // Metode baru untuk memulai listener realtime
   void _startLinkedStudentsListener() {
     try {

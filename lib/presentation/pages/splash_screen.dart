@@ -1,63 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:si_angkot/core/app_routes.dart';
-import 'package:si_angkot/core/constants.dart';
-import 'package:si_angkot/core/utils/app_text_style.dart';
-import 'package:si_angkot/gen/assets.gen.dart';
-import 'package:si_angkot/gen/colors.gen.dart';
-import 'package:si_angkot/presentation/controller/auth_controller.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
+
+import '../../core/app_routes.dart';
+import '../../gen/colors.gen.dart';
+import '../controller/auth_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   final AuthController _authController = Get.find<AuthController>();
-  double _opacity = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _startAnimation();
+    _startSplashLogic();
   }
 
-  void _startAnimation() async {
-    await Future.delayed(Duration(milliseconds: 100));
-
-    if (!mounted) return;
-    setState(() {
-      _opacity = 1.0;
-    });
-
+  void _startSplashLogic() async {
     try {
+      // Tampilkan CircularProgressIndicator minimal selama 2 detik
+      await Future.delayed(const Duration(seconds: 2));
+
+      // Jalankan pengecekan autentikasi
       await _authController.initialAuthCheck();
-
-      await Future.delayed(Constant.SPLASH_DURATION);
-
-      if (!mounted) return;
-      setState(() {
-        _opacity = 0.0;
-      });
-
-      await Future.delayed(Duration(milliseconds: 100));
 
       _navigateToNextScreen();
     } catch (e) {
-      // Handle any errors during initial auth check
+      // Tangani jika pengecekan gagal
       print('Error during initial auth check: $e');
-
-      if (!mounted) return;
       _navigateToNextScreen();
     }
   }
 
-  void _navigateToNextScreen() async {
-    if (!mounted) return;
-    await Future.delayed(Duration(milliseconds: 1000));
+  void _navigateToNextScreen() {
     if (_authController.firebaseUser != null) {
       final role = _authController.currentUser?.role ?? '';
       Get.offNamed(_getRouteForRole(role));
@@ -83,50 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.colorWhite,
-      body: AnimatedOpacity(
-        duration: Duration(milliseconds: 500),
-        opacity: _opacity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Spacer(),
-            MyAssets.png.icon.image(width: 95, height: 95),
-            Spacer(),
-            Column(
-              children: [
-                GradientText(
-                  Constant.APP_NAME,
-                  style: AppTextStyle.text3XLInter.copyWith(fontSize: 32),
-                  gradientType: GradientType.linear,
-                  gradientDirection: GradientDirection.ltr,
-                  colors: [
-                    MyColors.primaryColor,
-                    MyColors.secondaryColor,
-                  ],
-                ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MyAssets.png.iconDinasPerhubungan
-                        .image(width: 17, height: 20),
-                    SizedBox(width: 4),
-                    GradientText(
-                      Constant.DINAS_PERHUBUNGAN,
-                      style: AppTextStyle.textBASEInter,
-                      gradientType: GradientType.linear,
-                      gradientDirection: GradientDirection.ltr,
-                      colors: [
-                        MyColors.primaryColor,
-                        MyColors.secondaryColor,
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-          ],
+      body: Center(
+        child: CircularProgressIndicator(
+          color: MyColors.primaryColor,
+          strokeWidth: 2.0,
         ),
       ),
     );

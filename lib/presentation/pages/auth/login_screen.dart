@@ -28,240 +28,259 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.colorWhite,
-      body: Stack(
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: IntrinsicHeight(
+            child: Stack(
               children: [
-                MyAssets.png.icon.image(
-                  width: SizeHelper.dynamicWidth(80),
-                  height: SizeHelper.dynamicHeight(80),
-                  cacheHeight: 80,
-                  cacheWidth: 80,
-                ),
-                GradientText(
-                  Constant.APP_NAME,
-                  style: AppTextStyle.text3XLInter.copyWith(fontSize: 32),
-                  gradientType: GradientType.linear,
-                  gradientDirection: GradientDirection.ltr,
-                  colors: [
-                    MyColors.primaryColor,
-                    MyColors.secondaryColor,
-                  ],
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                GradientText(
-                  Constant.APP_DESCRIPTION,
-                  style: AppTextStyle.textHeadingInter.copyWith(fontSize: 14),
-                  gradientType: GradientType.linear,
-                  gradientDirection: GradientDirection.ltr,
-                  colors: [MyColors.primaryColor, MyColors.secondaryColor],
-                ),
-                const SizedBox(height: 24),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 50),
+                Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomTextField(
-                        hintText: Constant.EMAIL,
-                        borderColor: MyColors.borderInputTextSecondary,
-                        hintColor: MyColors.borderInputTextSecondary,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: emailController,
+                      MyAssets.png.icon.image(
+                        width: SizeHelper.dynamicWidth(80),
+                        height: SizeHelper.dynamicHeight(80),
+                        cacheHeight: 80,
+                        cacheWidth: 80,
                       ),
-                      CustomTextField(
-                        hintText: Constant.PASSWORD,
-                        isPassword: true,
-                        borderColor: MyColors.borderInputTextSecondary,
-                        hintColor: MyColors.borderInputTextSecondary,
-                        keyboardType: TextInputType.visiblePassword,
-                        controller: passwordController,
+                      GradientText(
+                        Constant.APP_NAME,
+                        style: AppTextStyle.text3XLInter.copyWith(fontSize: 32),
+                        gradientType: GradientType.linear,
+                        gradientDirection: GradientDirection.ltr,
+                        colors: [
+                          MyColors.primaryColor,
+                          MyColors.secondaryColor,
+                        ],
                       ),
-                      const SizedBox(height: 15),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: InkWell(
-                          onTap: () => AppUtils.showSnackbar(
-                              "On Click", "Forgot Password Clicked"),
-                          child: Text(
-                            Constant.FORGOT_PASSWORD,
-                            style: AppTextStyle.textBASEPoppins.copyWith(
-                              color: MyColors.fontColorSecondary,
-                              fontSize: 14,
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      GradientText(
+                        Constant.APP_DESCRIPTION,
+                        style: AppTextStyle.textHeadingInter
+                            .copyWith(fontSize: 14),
+                        gradientType: GradientType.linear,
+                        gradientDirection: GradientDirection.ltr,
+                        colors: [
+                          MyColors.primaryColor,
+                          MyColors.secondaryColor
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        child: Column(
+                          children: [
+                            CustomTextField(
+                              hintText: Constant.EMAIL,
+                              borderColor: MyColors.borderInputTextSecondary,
+                              hintColor: MyColors.borderInputTextSecondary,
+                              keyboardType: TextInputType.emailAddress,
+                              controller: emailController,
                             ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Obx(
-                        () {
-                          if (authController.isLoading.value) {
-                            return CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  MyColors.primaryColor),
-                            );
-                          } else {
-                            return CustomGradientButton(
-                              text: Constant.LOGIN,
-                              onPressed: () {
-                                authController.login(emailController.text,
-                                    passwordController.text);
+                            CustomTextField(
+                              hintText: Constant.PASSWORD,
+                              isPassword: true,
+                              borderColor: MyColors.borderInputTextSecondary,
+                              hintColor: MyColors.borderInputTextSecondary,
+                              keyboardType: TextInputType.visiblePassword,
+                              controller: passwordController,
+                            ),
+                            const SizedBox(height: 15),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: InkWell(
+                                onTap: () => AppUtils.showSnackbar(
+                                    "On Click", "Forgot Password Clicked"),
+                                child: Text(
+                                  Constant.FORGOT_PASSWORD,
+                                  style: AppTextStyle.textBASEPoppins.copyWith(
+                                    color: MyColors.fontColorSecondary,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            Obx(
+                              () {
+                                if (authController.isLoading.value) {
+                                  return CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        MyColors.primaryColor),
+                                  );
+                                } else {
+                                  return CustomGradientButton(
+                                    text: Constant.LOGIN,
+                                    onPressed: () {
+                                      authController.login(emailController.text,
+                                          passwordController.text);
+                                    },
+                                  );
+                                }
                               },
-                            );
-                          }
-                        },
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(bottom: SizeHelper.dynamicHeight(30)),
+                    child: RichText(
+                      text: TextSpan(
+                        text: Constant.DOESNT_HAVE_ACCOUNT,
+                        style: AppTextStyle.textBASEPoppins
+                            .copyWith(color: MyColors.fontColorSecondary),
+                        children: [
+                          TextSpan(
+                            text: ' ${Constant.REGISTER}',
+                            style: AppTextStyle.textBASEPoppins.copyWith(
+                                color: MyColors.primaryColor,
+                                fontWeight: FontWeight.w700),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Get.toNamed(AppRoutes.baseRegister);
+                              },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: SizeHelper.dynamicHeight(30)),
-              child: RichText(
-                text: TextSpan(
-                  text: Constant.DOESNT_HAVE_ACCOUNT,
-                  style: AppTextStyle.textBASEPoppins
-                      .copyWith(color: MyColors.fontColorSecondary),
-                  children: [
-                    TextSpan(
-                      text: ' ${Constant.REGISTER}',
-                      style: AppTextStyle.textBASEPoppins.copyWith(
-                          color: MyColors.primaryColor,
-                          fontWeight: FontWeight.w700),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Get.toNamed(AppRoutes.baseRegister);
-                        },
-                    )
-                  ],
-                ),
-              ),
-            ),
-          )
-        ],
+        ),
       ),
+      resizeToAvoidBottomInset: true,
     );
   }
 }
-
-// return Scaffold(
-//       body: Center(
-//         child: Padding(
-//           padding:
-//               EdgeInsets.symmetric(horizontal: SizeHelper.dynamicWidth(24)),
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               Spacer(),
-//               MyAssets.png.icon.image(
+// body: Stack(
+//         children: [
+//           Center(
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 MyAssets.png.icon.image(
 //                   width: SizeHelper.dynamicWidth(80),
 //                   height: SizeHelper.dynamicHeight(80),
 //                   cacheHeight: 80,
-//                   cacheWidth: 80),
-//               GradientText(
-//                 Constant.APP_NAME,
-//                 style: AppTextStyle.text3XLInter.copyWith(fontSize: 32),
-//                 gradientType: GradientType.linear,
-//                 gradientDirection: GradientDirection.ltr,
-//                 colors: [
-//                   MyColors.primaryColor,
-//                   MyColors.secondaryColor,
-//                 ],
-//               ),
-//               SizedBox(height: SizeHelper.dynamicHeight(4)),
-//               GradientText(
-//                 Constant.APP_DESCRIPTION,
-//                 style: AppTextStyle.textHeadingInter.copyWith(fontSize: 14),
-//                 gradientType: GradientType.linear,
-//                 gradientDirection: GradientDirection.ltr,
-//                 colors: [MyColors.primaryColor, MyColors.secondaryColor],
-//               ),
-//               SizedBox(height: SizeHelper.dynamicHeight(24)),
-//               Padding(
-//                 padding: EdgeInsets.symmetric(
-//                     horizontal: SizeHelper.dynamicHeight(24)),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     CustomTextField(
-//                       hintText: Constant.EMAIL,
-//                       keyboardType: TextInputType.emailAddress,
-//                       controller: emailController,
-//                     ),
-//                     SizedBox(height: SizeHelper.dynamicHeight(15)),
-//                     CustomTextField(
-//                       hintText: Constant.PASSWORD,
-//                       isPassword: true,
-//                       keyboardType: TextInputType.visiblePassword,
-//                       controller: passwordController,
-//                     ),
-//                     SizedBox(height: SizeHelper.dynamicHeight(15)),
-//                     Align(
-//                       alignment: Alignment.centerRight,
-//                       child: InkWell(
-//                         onTap: () => AppUtils.showSnackbar(
-//                             "On Click", "Forgot Password Clicked"),
-//                         child: Text(
-//                           Constant.FORGOT_PASSWORD,
-//                           style: AppTextStyle.textBASEPoppins.copyWith(
-//                             color: MyColors.fontColorSecondary,
-//                             fontSize: 14,
+//                   cacheWidth: 80,
+//                 ),
+//                 GradientText(
+//                   Constant.APP_NAME,
+//                   style: AppTextStyle.text3XLInter.copyWith(fontSize: 32),
+//                   gradientType: GradientType.linear,
+//                   gradientDirection: GradientDirection.ltr,
+//                   colors: [
+//                     MyColors.primaryColor,
+//                     MyColors.secondaryColor,
+//                   ],
+//                 ),
+//                 const SizedBox(
+//                   height: 4,
+//                 ),
+//                 GradientText(
+//                   Constant.APP_DESCRIPTION,
+//                   style: AppTextStyle.textHeadingInter.copyWith(fontSize: 14),
+//                   gradientType: GradientType.linear,
+//                   gradientDirection: GradientDirection.ltr,
+//                   colors: [MyColors.primaryColor, MyColors.secondaryColor],
+//                 ),
+//                 const SizedBox(height: 24),
+//                 Container(
+//                   padding: EdgeInsets.symmetric(horizontal: 50),
+//                   child: Column(
+//                     children: [
+//                       CustomTextField(
+//                         hintText: Constant.EMAIL,
+//                         borderColor: MyColors.borderInputTextSecondary,
+//                         hintColor: MyColors.borderInputTextSecondary,
+//                         keyboardType: TextInputType.emailAddress,
+//                         controller: emailController,
+//                       ),
+//                       CustomTextField(
+//                         hintText: Constant.PASSWORD,
+//                         isPassword: true,
+//                         borderColor: MyColors.borderInputTextSecondary,
+//                         hintColor: MyColors.borderInputTextSecondary,
+//                         keyboardType: TextInputType.visiblePassword,
+//                         controller: passwordController,
+//                       ),
+//                       const SizedBox(height: 15),
+//                       Align(
+//                         alignment: Alignment.centerRight,
+//                         child: InkWell(
+//                           onTap: () => AppUtils.showSnackbar(
+//                               "On Click", "Forgot Password Clicked"),
+//                           child: Text(
+//                             Constant.FORGOT_PASSWORD,
+//                             style: AppTextStyle.textBASEPoppins.copyWith(
+//                               color: MyColors.fontColorSecondary,
+//                               fontSize: 14,
+//                             ),
 //                           ),
 //                         ),
 //                       ),
-//                     ),
-//                     SizedBox(height: SizeHelper.dynamicHeight(15)),
-//                     GetBuilder<LoginController>(
-//                       builder: (controller) {
-//                         return controller.isLoading
-//                             ? CircularProgressIndicator(
-//                                 valueColor: AlwaysStoppedAnimation<Color>(
-//                                     MyColors.primaryColor),
-//                               )
-//                             : CustomGradientButton(
-//                                 text: Constant.LOGIN,
-//                                 onPressed: () {
-//                                   controller.login(emailController.text,
-//                                       passwordController.text);
-//                                 },
-//                               );
-//                       },
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               Spacer(),
-//               Padding(
-//                 padding: EdgeInsets.only(bottom: SizeHelper.dynamicHeight(30)),
-//                 child: RichText(
-//                   text: TextSpan(
-//                     text: Constant.DOESNT_HAVE_ACCOUNT,
-//                     style: AppTextStyle.textBASEPoppins
-//                         .copyWith(color: MyColors.fontColorSecondary),
-//                     children: [
-//                       TextSpan(
-//                         text: ' ${Constant.REGISTER}',
-//                         style: AppTextStyle.textBASEPoppins.copyWith(
-//                             color: MyColors.primaryColor,
-//                             fontWeight: FontWeight.w700),
-//                         recognizer: TapGestureRecognizer()
-//                           ..onTap = () {
-//                             Get.toNamed('/base-register');
-//                           },
-//                       )
+//                       const SizedBox(height: 15),
+//                       Obx(
+//                         () {
+//                           if (authController.isLoading.value) {
+//                             return CircularProgressIndicator(
+//                               valueColor: AlwaysStoppedAnimation<Color>(
+//                                   MyColors.primaryColor),
+//                             );
+//                           } else {
+//                             return CustomGradientButton(
+//                               text: Constant.LOGIN,
+//                               onPressed: () {
+//                                 authController.login(emailController.text,
+//                                     passwordController.text);
+//                               },
+//                             );
+//                           }
+//                         },
+//                       ),
 //                     ],
 //                   ),
 //                 ),
-//               ),
-//             ],
+//               ],
+//             ),
 //           ),
-//         ),
+//           Container(
+//             alignment: Alignment.bottomCenter,
+//             child: Padding(
+//               padding: EdgeInsets.only(bottom: SizeHelper.dynamicHeight(30)),
+//               child: RichText(
+//                 text: TextSpan(
+//                   text: Constant.DOESNT_HAVE_ACCOUNT,
+//                   style: AppTextStyle.textBASEPoppins
+//                       .copyWith(color: MyColors.fontColorSecondary),
+//                   children: [
+//                     TextSpan(
+//                       text: ' ${Constant.REGISTER}',
+//                       style: AppTextStyle.textBASEPoppins.copyWith(
+//                           color: MyColors.primaryColor,
+//                           fontWeight: FontWeight.w700),
+//                       recognizer: TapGestureRecognizer()
+//                         ..onTap = () {
+//                           Get.toNamed(AppRoutes.baseRegister);
+//                         },
+//                     )
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           )
+//         ],
 //       ),
-//     );

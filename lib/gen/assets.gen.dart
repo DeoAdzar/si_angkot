@@ -15,18 +15,37 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsPngGen {
   const $AssetsPngGen();
 
+  /// File path: assets/png/android_splash_logo.png
+  AssetGenImage get androidSplashLogo =>
+      const AssetGenImage('assets/png/android_splash_logo.png');
+
+  /// File path: assets/png/branding.png
+  AssetGenImage get branding => const AssetGenImage('assets/png/branding.png');
+
+  /// File path: assets/png/branding_1.png
+  AssetGenImage get branding1 =>
+      const AssetGenImage('assets/png/branding_1.png');
+
   /// File path: assets/png/icon.png
   AssetGenImage get icon => const AssetGenImage('assets/png/icon.png');
-
-  /// File path: assets/png/icon_500.png
-  AssetGenImage get icon500 => const AssetGenImage('assets/png/icon_500.png');
 
   /// File path: assets/png/icon_dinas_perhubungan.png
   AssetGenImage get iconDinasPerhubungan =>
       const AssetGenImage('assets/png/icon_dinas_perhubungan.png');
 
+  /// File path: assets/png/splashscreen_logo.png
+  AssetGenImage get splashscreenLogo =>
+      const AssetGenImage('assets/png/splashscreen_logo.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [icon, icon500, iconDinasPerhubungan];
+  List<AssetGenImage> get values => [
+    androidSplashLogo,
+    branding,
+    branding1,
+    icon,
+    iconDinasPerhubungan,
+    splashscreenLogo,
+  ];
 }
 
 class $AssetsSvgGen {

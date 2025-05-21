@@ -21,6 +21,8 @@ class DriverController extends GetxController {
   // List alamat hasil detail route
   final addressList = <String>[].obs;
 
+  final studentIds = <String>[].obs;
+
   final trackingId = ''.obs;
 
   var nameTemp = "".obs;
@@ -64,10 +66,13 @@ class DriverController extends GetxController {
     }
 
     var studentProfile = await _authService.getUserProfile(studentId);
+    studentIds.add(studentId);
     if (studentProfile == null) {
       AppUtils.showSnackbar("Oops!", "User tidak ditemukan", isError: true);
       return;
     }
+
+    //nampilin dialog konfirmasi
 
     await trackingService.updateTrackingIdStudent(
       studentId: studentId,
@@ -96,6 +101,15 @@ class DriverController extends GetxController {
     );
   }
 
+  void removeTrackingIdStudent(
+      {required String studentId,
+      required Null Function(dynamic isSuccess, dynamic message) onResult}) {
+    trackingService.removeTrackingIdStudent(
+      studentId: studentId,
+      onResult: onResult,
+    );
+  }
+
   // Ambil list nama routes dari Firebase
   void loadRoutes() async {
     var names = await trackingService.fetchRouteNames();
@@ -106,6 +120,8 @@ class DriverController extends GetxController {
     final studentId = await _authService.getUserIdByNISN(nisn);
     if (studentId != null) {
       //Function untuk add history ke Firebase
+      studentIds.add(studentId);
+
       await trackingService.updateTrackingIdStudent(
         studentId: studentId,
         trackingId: trackingId.value,
@@ -153,7 +169,9 @@ class DriverController extends GetxController {
     trackingId.value = id;
 
     // Jika duty type OnDuty, mulai update lokasi
+    print(" Location:dutyType: ${dutyType.value}");
     if (dutyType.value == 'OnDuty') {
+      print("Location: Starting location updates...");
       trackingService.startLocationUpdates();
     }
 

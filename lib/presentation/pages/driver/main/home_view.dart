@@ -215,6 +215,8 @@ class DriverHomeView extends StatelessWidget {
                 ),
                 onPressed: () async {
                   if (driverController.dutyType.value == "OnDuty") {
+                    final studentIdsCopy =
+                        List<String>.from(driverController.studentIds);
                     driverController.dutyType.value = "OffDuty";
                     driverController.addressList.clear();
                     driverController.deliveryType.value = "";
@@ -222,6 +224,20 @@ class DriverHomeView extends StatelessWidget {
                     SharedPreferencesHelper.putString(
                         Constant.TRACKING_ID_KEY, "");
                     driverController.trackingService.stopLocationUpdates();
+                    for (var studentId in studentIdsCopy) {
+                      driverController.removeTrackingIdStudent(
+                        studentId: studentId,
+                        onResult: (isSuccess, message) {
+                          if (isSuccess) {
+                            print("Location: success remove $studentId");
+                            driverController.studentIds.remove(studentId);
+                          } else {
+                            print(
+                                "Failed to remove tracking ID for $studentId");
+                          }
+                        },
+                      );
+                    }
                   } else {
                     bool isGranted =
                         await handleLocationPermission(Get.context!);

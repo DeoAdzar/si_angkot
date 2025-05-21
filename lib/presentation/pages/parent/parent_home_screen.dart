@@ -79,38 +79,71 @@ class ParentHomeScreen extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Expanded(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Obx(() {
-              final linkedStudents = authController.linkedStudents;
-              if (authController.linkedStudents.isEmpty) {
-                return const Center(
-                    child: Text("Belum ada student yang terdaftar"));
-              }
-              return ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                itemCount: linkedStudents.length,
-                itemBuilder: (context, index) {
-                  final student = linkedStudents[index];
-
-                  // Menggunakan data dari model
-                  return StudentListItem(
-                    name: student.name,
-                    school: student.school ?? 'Unknown School',
-                    status: student.isVerify ?? false,
-                    profileImageUrl: student.picture,
-                    onTap: () {
-                      // Navigasi ke halaman detail student atau tindakan lainnya
-                      AppUtils.showSnackbar(
-                          "Student Select", "${student.name} selected",
-                          isError: false);
-                      // Get.toNamed(AppRoutes.studentDetail, arguments: student);
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Obx(
+                () {
+                  final linkedStudents = authController.linkedStudents;
+                  if (authController.linkedStudents.isEmpty) {
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        // Memuat ulang data siswa secara manual dengan memanggil listener lagi
+                        authController.fetchLinkedStudents();
+                        // Tambahkan delay kecil agar refresh indicator terlihat
+                      },
+                      child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: const [
+                          SizedBox(
+                              height: 200), // Memberikan ruang untuk scroll
+                          Center(
+                              child: Text("Belum ada student yang terdaftar")),
+                        ],
+                      ),
+                    );
+                  }
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      // Panggil fungsi untuk memuat ulang data siswa
+                      await authController.fetchLinkedStudents();
                     },
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      physics:
+                          const AlwaysScrollableScrollPhysics(), // Memastikan scroll berfungsi meski konten sedikit
+                      itemCount: linkedStudents.length,
+                      itemBuilder: (context, index) {
+                        final student = linkedStudents[index];
+
+                        // Menggunakan data dari model
+                        return StudentListItem(
+                          name: student.name,
+                          school: student.school ?? 'Unknown School',
+                          status: student.isVerify ?? false,
+                          profileImageUrl: student.picture,
+                          onTap: () {
+                            // Navigasi ke halaman detail student atau tindakan lainnya
+                            if (student.isVerify == false) {
+                              AppUtils.showSnackbar(
+                                  "Error", "Akun belum diverifikasi",
+                                  isError: true);
+                            } else {
+                              controller.listenToTrackingId(student.userId);
+                              print(
+                                  "Tracking: Student ID is s${student.userId}");
+                              Get.toNamed(AppRoutes.parentTracking,
+                                  arguments: student);
+                            }
+                            // Get.toNamed(AppRoutes.studentDetail, arguments: student);
+                          },
+                        );
+                      },
+                    ),
                   );
                 },
-              );
-            }),
-          ))
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -56,15 +56,13 @@ class StudentHomeScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 20),
                         MenuButton(
-                          icon: MyAssets.svg.history.svg(
-                              width: 50,
-                              height: 50,
-                              colorFilter: ColorFilter.mode(
-                                  MyColors.primaryColor, BlendMode.srcIn)),
-                          label: Constant.HISTORY_EN,
-                          onTap: () =>
-                              AppUtils.showSnackbar("OnClick", "History"),
-                        ),
+                            icon: MyAssets.svg.history.svg(
+                                width: 50,
+                                height: 50,
+                                colorFilter: ColorFilter.mode(
+                                    MyColors.primaryColor, BlendMode.srcIn)),
+                            label: Constant.HISTORY_EN,
+                            onTap: () => Get.toNamed(AppRoutes.studentHistory)),
                       ],
                     ),
                   ),

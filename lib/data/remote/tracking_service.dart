@@ -7,7 +7,40 @@ import 'package:si_angkot/core.dart';
 
 class TrackingService {
   DatabaseReference? _trackingRef;
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
   StreamSubscription<Position>? _positionStream;
+  StreamSubscription<DatabaseEvent>? _subscriptionTracking;
+
+  void listenToTracking({
+    required String trackingId,
+    required Function(double lat, double long) onLocationUpdate,
+  }) {
+    _subscriptionTracking =
+        _dbRef.child('Tracking/$trackingId').onValue.listen((event) {
+      if (event.snapshot.exists) {
+        final data = event.snapshot.value as Map<dynamic, dynamic>;
+        final lat = (data['lat'] ?? 0).toDouble();
+        final long = (data['long'] ?? 0).toDouble();
+        onLocationUpdate(lat, long);
+      }
+    });
+  }
+
+  void stopListening() {
+    _subscriptionTracking?.cancel();
+    _subscriptionTracking = null;
+    print("Tracking stopped.");
+  }
+
+  Stream<String?> streamTrackingId(String userId) {
+    final userTrackingRef =
+        _dbRef.child('Users').child(userId).child('trackingId');
+    return userTrackingRef.onValue.map((event) {
+      final value = event.snapshot.value;
+      print("Tracking: Stream studentTrackingId: $value");
+      return value?.toString();
+    });
+  }
 
   Future<String> saveTracking({
     required String driverId,
@@ -22,6 +55,7 @@ class TrackingService {
     );
 
     _trackingRef = FirebaseDatabase.instance.ref('Tracking/$trackingId');
+    SharedPreferencesHelper.putString(Constant.TRACKING_ID_KEY, trackingId);
 
     await _trackingRef!.set({
       'lat': position.latitude,
@@ -32,8 +66,6 @@ class TrackingService {
       'updated_at': now.toIso8601String(),
     });
 
-    SharedPreferencesHelper.putString(Constant.TRACKING_ID_KEY, trackingId);
-
     return trackingId;
   }
 
@@ -43,7 +75,7 @@ class TrackingService {
 
     _positionStream = Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
-        distanceFilter: 50, // update setiap 50 meter
+        distanceFilter: 25, // update setiap 25 meter
         accuracy: LocationAccuracy.high,
       ),
     ).listen((Position position) {
@@ -179,7 +211,6 @@ class TrackingService {
         updates['$driverPath/offBoardTimestamp'] = now;
         removeTrackingIdStudent(
           studentId: studentId,
-          trackingId: trackingId,
           onResult: (isSuccess, message) {
             if (!isSuccess) {
               AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
@@ -199,7 +230,6 @@ class TrackingService {
 
   void removeTrackingIdStudent(
       {required String studentId,
-      required String trackingId,
       required Null Function(dynamic isSuccess, dynamic message) onResult}) {
     // inisialisasi Firebase Database
     final db = FirebaseDatabase.instance.ref();

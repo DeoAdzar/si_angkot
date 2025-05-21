@@ -5,6 +5,7 @@ class Constant {
   static const String DINAS_PERHUBUNGAN = 'Dinas Perhubungan';
 
   static const String TRACKING_ID_KEY = 'tracking_id';
+  static const String STUDENT_ID_LIST_KEY = 'student_id_list';
 
   static const Duration SPLASH_DURATION = Duration(seconds: 2);
 
