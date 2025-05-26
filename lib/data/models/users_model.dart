@@ -32,7 +32,7 @@ class UserModel {
       userId: userId,
       name: map['name'] ?? '',
       address: map['address'] ?? '',
-      role: map['role'] ?? 'user',
+      role: map['role'] ?? '',
       email: map['email'] ?? '',
       picture: map['picture'] ?? '',
       phone: map['phone'] ?? '',

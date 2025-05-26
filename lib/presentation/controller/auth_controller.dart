@@ -382,12 +382,19 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      await _authService.updateUserProfile(updatedUser);
-      _currentUser.value = updatedUser;
-      Get.snackbar('Success', 'Profile updated successfully');
+      await _authService.updateUserProfile(updatedUser).then((value) {
+        _currentUser.value = updatedUser;
+        Get.back();
+        AppUtils.showSnackbar('Success', 'Profile updated successfully');
+        print('TRACKER : update profile success ${_currentUser.value}');
+      }).catchError((error) {
+        print('TRACKER : update profile error $error');
+        throw Exception('Update failed: ${error.toString()}');
+      });
     } catch (e) {
       errorMessage.value = 'Update failed: ${e.toString()}';
-      rethrow;
+      AppUtils.showSnackbar('Error', "Update data failed", isError: true);
+      // rethrow;
     } finally {
       isLoading.value = false;
     }
@@ -424,4 +431,39 @@ class AuthController extends GetxController {
   }
 
   void clearError() => errorMessage.value = '';
+
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  Future<void> resetPassword(String email) async {
+    isLoading.value = true;
+    // Validation
+    if (email.isEmpty) {
+      AppUtils.showSnackbar("Oops!", 'Please enter your email address',
+          isError: true);
+      isLoading.value = false;
+      return;
+    }
+
+    if (!_isValidEmail(email)) {
+      AppUtils.showSnackbar("Oops!", 'Please enter a valid email address',
+          isError: true);
+      isLoading.value = false;
+      return;
+    }
+
+    try {
+      await _authService.sendPasswordResetEmail(email);
+
+      // Show success message
+      AppUtils.showSnackbar(
+          "Success!", 'Password reset email sent successfully');
+      // Navigate back after 2 seconds
+    } catch (e) {
+      AppUtils.showSnackbar("Oops!", e.toString(), isError: true);
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

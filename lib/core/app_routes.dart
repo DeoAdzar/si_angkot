@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
+import 'package:si_angkot/presentation/pages/auth/forgot_password_screen.dart';
 import 'package:si_angkot/presentation/pages/auth/register_screen.dart';
 import 'package:si_angkot/presentation/pages/auth/login_screen.dart';
+import 'package:si_angkot/presentation/pages/driver/driver_detail_history_screen.dart';
 import 'package:si_angkot/presentation/pages/driver/driver_home_screen.dart';
 import 'package:si_angkot/presentation/pages/driver/main/main_scan_view.dart';
 import 'package:si_angkot/presentation/pages/parent/parent_home_screen.dart';
@@ -17,6 +19,7 @@ import 'package:si_angkot/presentation/pages/student/student_settings_screen.dar
 class AppRoutes {
   static const String splash = '/';
   static const String login = '/login';
+  static const String forgotPassword = '/forgot-password';
   static const String baseRegister = '/base-register';
   static const String student = '/student-home';
   static const String studentPending = '/student-pending';
@@ -29,11 +32,13 @@ class AppRoutes {
   static const String parentFormRegister = '/parent-form-register';
   static const String parentTracking = '/parent-tracking';
   static const String driverBaseScan = '/driver-base-scan';
+  static const String driverDetailHistory = '/driver-detail-history';
 
   static final List<GetPage> pages = [
     GetPage(name: splash, page: () => SplashScreen()),
     GetPage(name: login, page: () => LoginScreen()),
     GetPage(name: baseRegister, page: () => RegisterScreen()),
+    GetPage(name: forgotPassword, page: () => ForgotPasswordScreen()),
 
     //student
     GetPage(name: student, page: () => StudentHomeScreen()),
@@ -46,6 +51,7 @@ class AppRoutes {
     //Driver
     GetPage(name: driver, page: () => DriverHomeScreen()),
     GetPage(name: driverBaseScan, page: () => MainScanView()),
+    GetPage(name: driverDetailHistory, page: () => DriverDetailHistoryScreen()),
 
     //Parent
     GetPage(name: parent, page: () => ParentHomeScreen()),

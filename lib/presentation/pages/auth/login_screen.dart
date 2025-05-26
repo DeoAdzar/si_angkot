@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:si_angkot/core/app_routes.dart';
 import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
-import 'package:si_angkot/core/utils/app_utils.dart';
 import 'package:si_angkot/core/utils/helper/size_helper.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/presentation/controller/auth_controller.dart';
@@ -93,9 +92,9 @@ class LoginScreen extends StatelessWidget {
                             const SizedBox(height: 15),
                             Align(
                               alignment: Alignment.centerRight,
-                              child: InkWell(
-                                onTap: () => AppUtils.showSnackbar(
-                                    "On Click", "Forgot Password Clicked"),
+                              child: GestureDetector(
+                                onTap: () =>
+                                    Get.toNamed(AppRoutes.forgotPassword),
                                 child: Text(
                                   Constant.FORGOT_PASSWORD,
                                   style: AppTextStyle.textBASEPoppins.copyWith(

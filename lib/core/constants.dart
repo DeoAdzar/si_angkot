@@ -12,6 +12,7 @@ class Constant {
   static const String LOGIN = "Log in";
   static const String REGISTER = "Daftar";
   static const String FORGOT_PASSWORD = "Lupa Kata Sandi?";
+  static const String SEND = "Kirim";
   static const String HOME = "Beranda";
   static const String CREATE_ACCOUNT = "Buat Akun";
   static const String SAVE = "Simpan";

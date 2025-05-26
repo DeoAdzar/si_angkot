@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:si_angkot/core.dart';
-import 'package:si_angkot/core/constants.dart';
-import 'package:si_angkot/core/utils/app_text_style.dart';
-import 'package:si_angkot/core/utils/app_utils.dart';
-import 'package:si_angkot/gen/assets.gen.dart';
-import 'package:si_angkot/gen/colors.gen.dart';
-import 'package:si_angkot/presentation/controller/driver_controller.dart';
-import 'package:si_angkot/presentation/widgets/custom_gradient_button.dart';
-import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
 
 class DriverSettingsView extends StatefulWidget {
   DriverSettingsView({super.key});
@@ -27,7 +19,7 @@ class _DriverSettingsViewState extends State<DriverSettingsView> {
 
   late TextEditingController phoneController;
 
-  late TextEditingController emailController;
+  // late TextEditingController emailController;
 
   // late TextEditingController passwordController;
 
@@ -40,8 +32,8 @@ class _DriverSettingsViewState extends State<DriverSettingsView> {
         TextEditingController(text: authController.currentUser?.address ?? "");
     phoneController =
         TextEditingController(text: authController.currentUser?.phone ?? "");
-    emailController =
-        TextEditingController(text: authController.currentUser?.email ?? "");
+    // emailController =
+    //     TextEditingController(text: authController.currentUser?.email ?? "");
     // passwordController = TextEditingController();
   }
 
@@ -133,13 +125,13 @@ class _DriverSettingsViewState extends State<DriverSettingsView> {
                       borderColor: MyColors.borderInputText,
                       keyboardType: TextInputType.phone,
                     ),
-                    CustomTextField(
-                      controller: emailController,
-                      hintText: Constant.EMAIL,
-                      label: Constant.EMAIL,
-                      borderColor: MyColors.borderInputText,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
+                    // CustomTextField(
+                    //   controller: emailController,
+                    //   hintText: Constant.EMAIL,
+                    //   label: Constant.EMAIL,
+                    //   borderColor: MyColors.borderInputText,
+                    //   keyboardType: TextInputType.emailAddress,
+                    // ),
                     // CustomTextField(
                     //   controller: passwordController,
                     //   hintText: Constant.PASSWORD,
@@ -159,8 +151,14 @@ class _DriverSettingsViewState extends State<DriverSettingsView> {
                 driverController.nameTemp.value = nameController.text;
                 driverController.addressTemp.value = addressController.text;
                 driverController.phoneTemp.value = phoneController.text;
-                driverController.emailTemp.value = emailController.text;
-                AppUtils.showSnackbar("Settings save", "Saved");
+                // driverController.emailTemp.value = emailController.text;
+                UserModel updatedUser = authController.currentUser!.copyWith(
+                  name: driverController.nameTemp.value,
+                  phone: driverController.phoneTemp.value,
+                  address: driverController.addressTemp.value,
+                );
+
+                authController.updateProfile(updatedUser);
               },
             )
           ],

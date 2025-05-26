@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'package:si_angkot/core/app_routes.dart';
-import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_utils.dart';
+import 'package:si_angkot/data/local/shared_prefference_helper.dart';
 import 'package:si_angkot/data/remote/auth_service.dart';
 import 'package:si_angkot/data/remote/tracking_service.dart';
+
+import '../../core/constants.dart';
 
 class DriverController extends GetxController {
   //---------------USED----------------
@@ -30,6 +32,9 @@ class DriverController extends GetxController {
   var addressTemp = "".obs;
   var phoneTemp = "".obs;
   var emailTemp = "".obs;
+
+  var selectedStatusIndex = 0.obs;
+  var bottomNavIndex = 0.obs;
 
   @override
   void onInit() {
@@ -66,39 +71,46 @@ class DriverController extends GetxController {
     }
 
     var studentProfile = await _authService.getUserProfile(studentId);
-    studentIds.add(studentId);
+
     if (studentProfile == null) {
       AppUtils.showSnackbar("Oops!", "User tidak ditemukan", isError: true);
       return;
     }
 
-    //nampilin dialog konfirmasi
+    AppUtils.showDialog("Apakah Data Anda Benar?",
+        "nama: ${studentProfile.name}\nnisn: ${studentProfile.nisn}\nalamat: ${studentProfile.address}\nsekolah: ${studentProfile.school}",
+        onConfirm: () async {
+      // Jika user menekan tombol konfirmasi, lanjutkan dengan update
+      studentIds.add(studentId);
 
-    await trackingService.updateTrackingIdStudent(
-      studentId: studentId,
-      trackingId: id,
-      onResult: (isSuccess, message) {
-        if (!isSuccess) {
-          AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
-              isError: true);
-          return;
-        }
-      },
-    );
+      //nampilin dialog konfirmasi
 
-    await trackingService.saveHistory(
-      studentId: studentId,
-      driverId: driverId,
-      dutyType: type,
-      trackingId: id,
-      onResult: (isSuccess, message) {
-        AppUtils.showSnackbar(
-          isSuccess ? "Berhasil" : "Gagal",
-          message,
-          isError: !isSuccess,
-        );
-      },
-    );
+      await trackingService.updateTrackingIdStudent(
+        studentId: studentId,
+        trackingId: id,
+        onResult: (isSuccess, message) {
+          if (!isSuccess) {
+            AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
+                isError: true);
+            return;
+          }
+        },
+      );
+
+      await trackingService.saveHistory(
+        studentId: studentId,
+        driverId: driverId,
+        dutyType: type,
+        trackingId: id,
+        onResult: (isSuccess, message) {
+          AppUtils.showSnackbar(
+            isSuccess ? "Berhasil" : "Gagal",
+            message,
+            isError: !isSuccess,
+          );
+        },
+      );
+    }, confirmText: "Sudah Benar", cancelText: "Batalkan", countdownSeconds: 5);
   }
 
   void removeTrackingIdStudent(
@@ -117,35 +129,47 @@ class DriverController extends GetxController {
   }
 
   void findNISN(String nisn, String driverID) async {
-    final studentId = await _authService.getUserIdByNISN(nisn);
-    if (studentId != null) {
+    final studentProfile = await _authService.getUserIdByNISN(nisn);
+    if (studentProfile != null) {
+      String studentId = studentProfile.userId;
       //Function untuk add history ke Firebase
-      studentIds.add(studentId);
+      AppUtils.showDialog("Apakah Data Anda Benar?",
+          "nama: ${studentProfile.name}\nnisn: ${studentProfile.nisn}\nalamat: ${studentProfile.address}\nsekolah: ${studentProfile.school}",
+          onConfirm: () async {
+        // Jika user menekan tombol konfirmasi, lanjutkan dengan update
+        studentIds.add(studentId);
 
-      await trackingService.updateTrackingIdStudent(
-        studentId: studentId,
-        trackingId: trackingId.value,
-        onResult: (isSuccess, message) {
-          if (!isSuccess) {
-            AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
-                isError: true);
-            return;
-          }
-        },
-      );
-      await trackingService.saveHistory(
-        studentId: studentId,
-        driverId: driverID,
-        dutyType: deliveryType.value,
-        trackingId: trackingId.value,
-        onResult: (isSuccess, message) {
-          if (isSuccess) {
-            AppUtils.showSnackbar("Berhasil", message);
-          } else {
-            AppUtils.showSnackbar("Gagal", message, isError: true);
-          }
-        },
-      );
+        //nampilin dialog konfirmasi
+
+        await trackingService.updateTrackingIdStudent(
+          studentId: studentId,
+          trackingId: trackingId.value,
+          onResult: (isSuccess, message) {
+            if (!isSuccess) {
+              AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
+                  isError: true);
+              return;
+            }
+          },
+        );
+        await trackingService.saveHistory(
+          studentId: studentId,
+          driverId: driverID,
+          dutyType: deliveryType.value,
+          trackingId: trackingId.value,
+          onResult: (isSuccess, message) {
+            if (isSuccess) {
+              AppUtils.showSnackbar("Berhasil", message);
+            } else {
+              AppUtils.showSnackbar("Gagal", message, isError: true);
+            }
+          },
+        );
+      },
+          confirmText: "Sudah Benar",
+          cancelText: "Batalkan",
+          countdownSeconds: 5);
+      studentIds.add(studentId);
     } else {
       AppUtils.showSnackbar(
         "Terjadi Kesalahan",
@@ -206,57 +230,9 @@ class DriverController extends GetxController {
     }
   }
 
-  //---------------UNUSED----------------
-  var dutyStatusList = <String>[Constant.DELIVER, Constant.DEPARTURE];
-  var selectedStatusIndex = 0.obs;
-  var bottomNavIndex = 0.obs;
-
-  var carRoutesDeliver = <String>[
-    'Bok Malang',
-    'Pilang Werda',
-    'Lapangan Pilang Bango',
-    'Pilang Mulya',
-    'Lapangan Rejomulyo',
-    'Pelita Tama',
-    'Imam Bonjol',
-    'Diponegoro',
-    'Biliton',
-    'Kompol Sunaryo',
-    'Dr. Soetomo',
-    'Sumatera',
-    'Pahlawan',
-    'Kartini',
-    'Jawa',
-    'Pahlawan',
-    'Cokroaminoto',
-    'Citandui',
-    'H. A. Salim',
-    'Kol. Marhadi',
-    'Alun-Alun',
-  ].obs;
-
-  var carRoutesDepart = <String>[
-    'Alun-Alun',
-    'Pandan',
-    'A. Yani',
-    'Pahlawan',
-    'Kartini',
-    'Jawa',
-    'Pahlawan',
-    'Sumatera',
-    'Dr. Soetomo',
-    'Kompol Sunaryo',
-    'Biliton',
-    'Diponegoro',
-    'Imam Bonjol',
-    'Pelita Tama',
-    'Lapangan Rejomulyo',
-    'Lapangan Pilangbango',
-    'Pilang Werda',
-    'Bok Malang',
-  ].obs;
-
-  void selectStatus(int index) {
-    selectedStatusIndex.value = index;
+  @override
+  void onClose() {
+    super.onClose();
+    SharedPreferencesHelper.putString(Constant.TRACKING_ID_KEY, "");
   }
 }

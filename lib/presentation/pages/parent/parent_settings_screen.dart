@@ -3,13 +3,14 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:si_angkot/core/constants.dart';
 import 'package:si_angkot/core/utils/app_text_style.dart';
-import 'package:si_angkot/core/utils/app_utils.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
 import 'package:si_angkot/presentation/controller/auth_controller.dart';
 import 'package:si_angkot/presentation/controller/parent_controller.dart';
 import 'package:si_angkot/presentation/widgets/custom_gradient_button.dart';
 import 'package:si_angkot/presentation/widgets/custom_text_fields.dart';
+
+import '../../../data/models/users_model.dart';
 
 class ParentSettingsScreen extends StatefulWidget {
   ParentSettingsScreen({super.key});
@@ -28,7 +29,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> {
 
   late TextEditingController phoneController;
 
-  late TextEditingController emailController;
+  // late TextEditingController emailController;
 
   // late TextEditingController passwordController;
 
@@ -42,8 +43,8 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> {
         TextEditingController(text: authController.currentUser?.address ?? "");
     phoneController =
         TextEditingController(text: authController.currentUser?.phone ?? "");
-    emailController =
-        TextEditingController(text: authController.currentUser?.email ?? "");
+    // emailController =
+    //     TextEditingController(text: authController.currentUser?.email ?? "");
     // passwordController = TextEditingController();
   }
 
@@ -135,13 +136,13 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> {
                       borderColor: MyColors.borderInputText,
                       keyboardType: TextInputType.phone,
                     ),
-                    CustomTextField(
-                      controller: emailController,
-                      hintText: Constant.EMAIL,
-                      label: Constant.EMAIL,
-                      borderColor: MyColors.borderInputText,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
+                    // CustomTextField(
+                    //   controller: emailController,
+                    //   hintText: Constant.EMAIL,
+                    //   label: Constant.EMAIL,
+                    //   borderColor: MyColors.borderInputText,
+                    //   keyboardType: TextInputType.emailAddress,
+                    // ),
                     // CustomTextField(
                     //   controller: passwordController,
                     //   hintText: Constant.PASSWORD,
@@ -161,8 +162,15 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> {
                 parentController.nameTemp.value = nameController.text;
                 parentController.addressTemp.value = addressController.text;
                 parentController.phoneTemp.value = phoneController.text;
-                parentController.emailTemp.value = emailController.text;
-                AppUtils.showSnackbar("Settings save", "Saved");
+                // parentController.emailTemp.value = emailController.text;
+
+                UserModel updatedUser = authController.currentUser!.copyWith(
+                  name: parentController.nameTemp.value,
+                  phone: parentController.phoneTemp.value,
+                  address: parentController.addressTemp.value,
+                );
+
+                authController.updateProfile(updatedUser);
               },
             )
           ],

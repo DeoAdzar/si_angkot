@@ -43,24 +43,26 @@ class DriverHomeView extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    return Column(
-      children: [
-        GradientHeader(
-          name: authController.currentUser?.name ?? 'Guest',
-          subtitle: 'Selamat bekerja',
-          imageUrl:
-              'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png',
-          onSignOut: () {
-            LogoutDialogConfirmation.show(
-              onSignOut: () {
-                authController.logout();
-                // AppUtils.showSnackbar("Logout", "Berhasil Logout");
-              },
-            );
-          },
-        ),
-      ],
-    );
+    return Obx(() {
+      return Column(
+        children: [
+          GradientHeader(
+            name: authController.currentUser?.name ?? 'Guest',
+            subtitle: 'Selamat bekerja',
+            imageUrl:
+                'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png',
+            onSignOut: () {
+              LogoutDialogConfirmation.show(
+                onSignOut: () {
+                  authController.logout();
+                  // AppUtils.showSnackbar("Logout", "Berhasil Logout");
+                },
+              );
+            },
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildRouteSection() {
@@ -86,7 +88,7 @@ class DriverHomeView extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 20),
           Obx(() => _buildRouteList()),
         ],
       ),

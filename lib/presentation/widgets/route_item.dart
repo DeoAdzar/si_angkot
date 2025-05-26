@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:si_angkot/core.dart';
 
 class RouteListItem extends StatelessWidget {
   final String routeName;
@@ -14,28 +13,45 @@ class RouteListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '• ',
-            style: AppTextStyle.textBASEPoppins.copyWith(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTimelineComponent(isLast),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            routeName,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              routeName,
-              style: AppTextStyle.textBASEPoppins.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: MyColors.fontColorPrimary),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimelineComponent(bool isLast) {
+    return SizedBox(
+      width: 20,
+      height: 40,
+      child: Column(
+        children: [
+          Container(
+            width: 15,
+            height: 15,
+            decoration: const BoxDecoration(
+              color: Color(0xFFE26C2C),
+              shape: BoxShape.circle,
             ),
           ),
+          if (!isLast)
+            Expanded(
+              child: Container(
+                width: 2,
+                color: const Color(0xFFE26C2C),
+              ),
+            ),
         ],
       ),
     );

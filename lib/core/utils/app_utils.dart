@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:si_angkot/core.dart';
 
 class AppUtils {
   static void showSnackbar(
@@ -62,5 +65,90 @@ class AppUtils {
       },
     );
     return "$formattedDate$id";
+  }
+
+  static void showDialog(
+    String title,
+    String message, {
+    required VoidCallback onConfirm,
+    void Function()? onCancel,
+    String confirmText = "OK",
+    String cancelText = "Cancel",
+    int? countdownSeconds,
+  }) {
+    late Timer? countdownTimer;
+    int remainingSeconds = countdownSeconds ?? 0;
+    final RxInt timerText = remainingSeconds.obs;
+
+    if (countdownSeconds != null) {
+      countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (remainingSeconds <= 1) {
+          timer.cancel();
+          Get.back();
+          onConfirm();
+        } else {
+          remainingSeconds--;
+          timerText.value = remainingSeconds;
+        }
+      });
+    }
+
+    Get.defaultDialog(
+      title: title,
+      radius: 12,
+      titleStyle: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16),
+          ),
+          if (countdownSeconds != null) ...[
+            const SizedBox(height: 12),
+            Obx(() => Text(
+                  "Auto confirming in ${timerText.value}s",
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )),
+          ],
+        ],
+      ),
+      confirm: TextButton(
+        onPressed: () {
+          countdownTimer?.cancel();
+          Get.back();
+          onConfirm();
+        },
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: MyColors.primaryColor,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        child: Text(confirmText),
+      ),
+      cancel: TextButton(
+        onPressed: () {
+          countdownTimer?.cancel();
+          if (onCancel != null) onCancel();
+          Get.back();
+        },
+        style: TextButton.styleFrom(
+          foregroundColor: MyColors.primaryColor,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        child: Text(cancelText),
+      ),
+    );
   }
 }

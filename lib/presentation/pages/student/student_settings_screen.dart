@@ -23,7 +23,7 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
 
   late TextEditingController phoneController;
 
-  late TextEditingController emailController;
+  // late TextEditingController emailController;
 
   late TextEditingController addressController;
 
@@ -40,8 +40,8 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
         TextEditingController(text: authController.currentUser?.address ?? "");
     nisnController =
         TextEditingController(text: authController.currentUser?.nisn ?? "");
-    emailController =
-        TextEditingController(text: authController.currentUser?.email ?? "");
+    // emailController =
+    // TextEditingController(text: authController.currentUser?.email ?? "");
     schoolController =
         TextEditingController(text: authController.currentUser?.school ?? "");
   }
@@ -155,13 +155,13 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
                       borderColor: MyColors.borderInputText,
                       keyboardType: TextInputType.streetAddress,
                     ),
-                    CustomTextField(
-                      controller: emailController,
-                      hintText: Constant.EMAIL,
-                      label: Constant.EMAIL,
-                      borderColor: MyColors.borderInputText,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
+                    // CustomTextField(
+                    //   controller: emailController,
+                    //   hintText: Constant.EMAIL,
+                    //   label: Constant.EMAIL,
+                    //   borderColor: MyColors.borderInputText,
+                    //   keyboardType: TextInputType.emailAddress,
+                    // ),
                   ],
                 ),
               ),
@@ -175,9 +175,19 @@ class _StudentSettingScreenState extends State<StudentSettingScreen> {
                     addressSchoolController.text;
                 studentController.schoolTemp.value = schoolController.text;
                 studentController.nisnTemp.value = nisnController.text;
-                studentController.emailTemp.value = addressController.text;
+                // studentController.emailTemp.value = addressController.text;
                 studentController.phoneTemp.value = phoneController.text;
-                AppUtils.showSnackbar("Register Student", "Register");
+                studentController.addressTemp.value = addressController.text;
+
+                UserModel updatedUser = authController.currentUser!.copyWith(
+                  name: studentController.nameTemp.value,
+                  school: studentController.schoolTemp.value,
+                  schoolAddress: studentController.schoolAddressTemp.value,
+                  nisn: studentController.nisnTemp.value,
+                  phone: studentController.phoneTemp.value,
+                  address: studentController.addressTemp.value,
+                );
+                authController.updateProfile(updatedUser);
               },
             )
           ],

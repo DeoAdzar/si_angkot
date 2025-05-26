@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:si_angkot/core/app_routes.dart';
 import 'package:si_angkot/core/constants.dart';
-import 'package:si_angkot/core/utils/app_utils.dart';
 import 'package:si_angkot/gen/assets.gen.dart';
 import 'package:si_angkot/gen/colors.gen.dart';
 import 'package:si_angkot/presentation/controller/auth_controller.dart';

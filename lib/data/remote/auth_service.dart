@@ -104,10 +104,12 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       print(
           "TRACKER : Register Error Firebase: ${e.message}"); // Tampilkan error lebih jelas
+      AppUtils.showSnackbar("Error", "${e.message}", isError: true);
       return null;
     } catch (e) {
       print(
           "TRACKER : Register Error Catch: ${e.toString()}"); // Tampilkan error lebih jelas
+      AppUtils.showSnackbar("Error", "${e.toString()}", isError: true);
       return null;
     }
   }
@@ -322,7 +324,7 @@ class AuthService {
     }
   }
 
-  Future<String?> getUserIdByNISN(String nisn) async {
+  Future<UserModel?> getUserIdByNISN(String nisn) async {
     final databaseRef = FirebaseDatabase.instance.ref().child('Users');
     final snapshot = await databaseRef.get();
 
@@ -333,12 +335,45 @@ class AuthService {
         final userId = entry.key;
         final userData = entry.value as Map<dynamic, dynamic>;
 
+        UserModel user = UserModel.fromMap(
+          Map<String, dynamic>.from(userData),
+          userId,
+        );
+
         if (userData['nisn'] == nisn) {
-          return userId;
+          return user;
         }
       }
     }
 
     return null; // jika tidak ditemukan
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email).then((value) {
+        AppUtils.showSnackbar(
+            'Reset Password', 'Password reset email sent successfully.');
+      });
+    } on FirebaseAuthException catch (e) {
+      throw Exception(_handleFirebaseAuthException(e));
+    } catch (e) {
+      throw Exception('An unexpected error occurred. Please try again.');
+    }
+  }
+
+  String _handleFirebaseAuthException(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return 'No user found with this email address.';
+      case 'invalid-email':
+        return 'Invalid email address.';
+      case 'too-many-requests':
+        return 'Too many requests. Please try again later.';
+      case 'network-request-failed':
+        return 'Network error. Please check your connection.';
+      default:
+        return 'An error occurred. Please try again.';
+    }
   }
 }

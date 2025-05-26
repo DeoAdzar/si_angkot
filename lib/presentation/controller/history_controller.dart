@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:si_angkot/core.dart';
 import 'package:si_angkot/data/models/driver_history/driver_history_model.dart';
 import 'package:si_angkot/data/models/driver_history/driver_student_activity_model.dart';
-import 'package:si_angkot/data/models/parent_student_history/parent_student_history_model.dart';
 import 'package:si_angkot/data/models/student_history/student_history_activity_detail.dart';
 import 'package:si_angkot/data/models/student_history/student_history_model.dart';
 import 'package:si_angkot/data/remote/history_service.dart';
@@ -11,6 +10,7 @@ import 'package:si_angkot/data/remote/history_service.dart';
 class HistoryController {
   final HistoryService _historyService = HistoryService();
   final RxBool isLoading = true.obs;
+  final Rx<UserModel?> selectedStudentHistory = Rx<UserModel?>(null);
 
   //student history
   final RxList<StudentHistoryModel> historyStudentEntries =
@@ -22,14 +22,15 @@ class HistoryController {
   final Rx<StudentHistoryModel?> studentSelectedEntry =
       Rx<StudentHistoryModel?>(null);
 
+  //parent history
+  final RxList<StudentHistoryActivityDetail> parentSelectedActivities =
+      <StudentHistoryActivityDetail>[].obs;
+
   //driver history
-  final RxList<DriverHistoryModel> historyDriverEntries =
-      <DriverHistoryModel>[].obs;
-  final RxList<DriverStudentActivityModel> selectedActivities =
-      <DriverStudentActivityModel>[].obs;
-  final Rx<DriverHistoryModel?> driverSelectedEntry =
-      Rx<DriverHistoryModel?>(null);
-  final RxString selectedTabHistoryDetailDriver = "Keberangkatan".obs;
+  final historyList = <DriverHistoryModel>[].obs;
+  final historyDetail = <String, List<DriverStudentActivityModel>>{}.obs;
+  final selectedDate = ''.obs;
+  final selectedDateFormatted = ''.obs;
 
   // Fetch student history
   // This method fetches the history of a student based on their ID.
@@ -56,15 +57,15 @@ class HistoryController {
       // Sort entries by date (newest first)
       entries.sort((a, b) => b.date.compareTo(a.date));
 
-      historyStudentEntries.value = entries;
       if (isParent) {
         final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
-        final allActivities = historyStudentEntries;
+        final allActivities = entries;
         // Find the entry for today
         final todayEntry =
             allActivities.firstWhereOrNull((entry) => entry.date == todayStr);
         todayStudentActivities.value = todayEntry?.activities ?? [];
       }
+      historyStudentEntries.value = entries;
       print("History student entries: ${historyStudentEntries.length}");
     } catch (e) {
       print("Error fetching student history: $e");
@@ -81,48 +82,106 @@ class HistoryController {
         entry.activities; // Pastikan ini dipanggil dan listnya sudah update
   }
 
+  void selectStudentHistory(UserModel student) {
+    selectedStudentHistory.value = student;
+  }
+
   //fetch driver history
   // This method fetches the history of a driver based on their ID.
-  void fetchDriverHistory(String driverId) async {
+  Future<void> fetchHistoryList(String? driverId) async {
     try {
       isLoading.value = true;
-      Map<String, Map<String, List<DriverStudentActivityModel>>>
-          groupedActivities =
-          await _historyService.fetchDriverHistory(driverId);
-
-      List<DriverHistoryModel> entries = [];
-
-      // Create driver history entries from the grouped activities
-      groupedActivities.forEach((date, dutyMap) {
-        List<DriverStudentActivityModel> allActivities = [
-          ...dutyMap['berangkat'] ?? [],
-          ...dutyMap['pulang'] ?? []
-        ];
-
-        allActivities.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-
-        entries.add(DriverHistoryModel(
-          id: date,
-          date: date,
-          studentActivities: allActivities,
-        ));
-      });
-
-      // Sort entries by date (newest first)
-      entries.sort((a, b) => b.date.compareTo(a.date));
-
-      historyDriverEntries.value = entries;
-
-      // Initially select the first entry if available
-      if (entries.isNotEmpty) {
-        driverSelectedEntry(entries.first);
+      if (driverId == null) {
+        _errorGetData(
+          'Sepertinya gagal mendapatkan data driver, coba lagi nanti.',
+        );
+        return;
       }
+      final result = await _historyService.fetchDriverHistoryList(driverId);
+      print("Driver history entries: ${result.length}");
+      historyList.value = result;
     } catch (e) {
-      print("Error fetching driver history: $e");
-      AppUtils.showSnackbar("Oops", "Gagal mendapatkan data history",
-          isError: true);
+      _errorGetData(
+        'Gagal memuat riwayat: ${e.toString()}',
+      );
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> fetchHistoryDetail(
+      String? driverId, String dateKey, String formattedDate) async {
+    try {
+      isLoading.value = true;
+      if (driverId == null) {
+        _errorGetData(
+          'Sepertinya gagal mendapatkan data driver, coba lagi nanti.',
+        );
+        return;
+      }
+      selectedDate.value = dateKey;
+      selectedDateFormatted.value = formattedDate;
+
+      final result =
+          await _historyService.fetchDriverHistoryDetail(driverId, dateKey);
+      historyDetail.value = result;
+
+      // Navigate to detail page
+      Get.toNamed(AppRoutes.driverDetailHistory);
+    } catch (e) {
+      _errorGetData(
+        'Gagal memuat detail riwayat: ${e.toString()}',
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Refresh data
+  Future<void> refreshHistoryList(String? driverId) async {
+    await fetchHistoryList(driverId);
+  }
+
+  void _errorGetData(String message) {
+    Get.back();
+    AppUtils.showSnackbar(
+      'Error',
+      message,
+      isError: true,
+    );
+  }
+
+  // Get formatted date for detail page
+  String getFormattedDetailDate() {
+    if (selectedDateFormatted.value.isNotEmpty) {
+      try {
+        final date = DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
+            .parse(selectedDateFormatted.value);
+        return DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(date);
+      } catch (e) {
+        return selectedDateFormatted.value;
+      }
+    }
+    return '';
+  }
+
+  // Get total activities count for a date
+  int getTotalActivitiesCount(List<DriverStudentActivityModel> activities) {
+    return activities.length;
+  }
+
+  // Get activities by duty type
+  List<DriverStudentActivityModel> getActivitiesByDutyType(String dutyType) {
+    return historyDetail[dutyType] ?? [];
+  }
+
+  // Check if has berangkat activities
+  bool hasBerangkatActivities() {
+    return historyDetail['berangkat']?.isNotEmpty ?? false;
+  }
+
+  // Check if has pulang activities
+  bool hasPulangActivities() {
+    return historyDetail['pulang']?.isNotEmpty ?? false;
   }
 }
