@@ -84,8 +84,8 @@ class AppUtils {
       countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
         if (remainingSeconds <= 1) {
           timer.cancel();
+          if (onCancel != null) onCancel();
           Get.back();
-          onConfirm();
         } else {
           remainingSeconds--;
           timerText.value = remainingSeconds;
