@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:si_angkot/core/app_routes.dart';
 import 'package:si_angkot/core/utils/app_utils.dart';
 import 'package:si_angkot/data/local/shared_prefference_helper.dart';
@@ -11,6 +15,7 @@ class DriverController extends GetxController {
   //---------------USED----------------
   final trackingService = TrackingService();
   final AuthService _authService = Get.put(AuthService());
+  final ImagePicker _picker = ImagePicker(); // Init function ImagePicker
 
   var currentIndex = 0.obs;
   // Form selections
@@ -36,6 +41,10 @@ class DriverController extends GetxController {
   var selectedStatusIndex = 0.obs;
   var bottomNavIndex = 0.obs;
 
+  // Variable untuk menyimpan gambar yang diambil
+  var capturedImage = Rxn<File>();
+  var capturedImageBase64 = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -59,6 +68,38 @@ class DriverController extends GetxController {
     emailTemp.value = email;
   }
 
+  Future<void> takePicture() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.camera, // Pastikan menggunakan kamera
+        maxWidth: 1920,
+        maxHeight: 1080,
+        imageQuality: 85,
+        preferredCameraDevice: CameraDevice.rear, // Gunakan kamera belakang
+      );
+
+      if (image != null) {
+        capturedImage.value = File(image.path);
+
+        // Convert gambar ke base64
+        List<int> imageBytes = await capturedImage.value!.readAsBytes();
+        capturedImageBase64.value = base64Encode(imageBytes);
+      } else {
+        AppUtils.showSnackbar("Info", "Pengambilan gambar dibatalkan",
+            isError: false);
+      }
+    } catch (e) {
+      AppUtils.showSnackbar("Error", "Gagal mengambil gambar: ${e.toString()}",
+          isError: true);
+    }
+  }
+
+  // Function untuk reset gambar
+  void resetCapturedImage() {
+    capturedImage.value = null;
+    capturedImageBase64.value = '';
+  }
+
   Future<void> updateTrackingIdStudent(
       String studentId, String driverId) async {
     final id = trackingId.value;
@@ -77,40 +118,66 @@ class DriverController extends GetxController {
       return;
     }
 
-    AppUtils.showDialog("Apakah Data Anda Benar?",
-        "nama: ${studentProfile.name}\nnisn: ${studentProfile.nisn}\nalamat: ${studentProfile.address}\nsekolah: ${studentProfile.school}",
-        onConfirm: () async {
-      // Jika user menekan tombol konfirmasi, lanjutkan dengan update
-      studentIds.add(studentId);
+    // Reset gambar sebelumnya
+    resetCapturedImage();
 
-      //nampilin dialog konfirmasi
+    // Ambil gambar terlebih dahulu
+    await takePicture();
 
-      await trackingService.updateTrackingIdStudent(
-        studentId: studentId,
-        trackingId: id,
-        onResult: (isSuccess, message) {
-          if (!isSuccess) {
-            AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
-                isError: true);
-            return;
-          }
-        },
-      );
+    // Cek apakah gambar berhasil diambil
+    if (capturedImage.value == null) {
+      AppUtils.showSnackbar("Oops!", "Gambar diperlukan untuk melanjutkan",
+          isError: true);
+      return;
+    }
 
-      await trackingService.saveHistory(
-        studentId: studentId,
-        driverId: driverId,
-        dutyType: type,
-        trackingId: id,
-        onResult: (isSuccess, message) {
-          AppUtils.showSnackbar(
-            isSuccess ? "Berhasil" : "Gagal",
-            message,
-            isError: !isSuccess,
-          );
-        },
-      );
-    }, confirmText: "Sudah Benar", cancelText: "Batalkan", countdownSeconds: 5);
+    AppUtils.showDialog(
+      "Apakah Data Anda Benar?",
+      "nama: ${studentProfile.name}\nnisn: ${studentProfile.nisn}\nalamat: ${studentProfile.address}\nsekolah: ${studentProfile.school}",
+      image: capturedImage.value!, // Pass the captured image
+      onConfirm: () async {
+        // Jika user menekan tombol konfirmasi, lanjutkan dengan update
+        studentIds.add(studentId);
+
+        await trackingService.updateTrackingIdStudent(
+          studentId: studentId,
+          trackingId: id,
+          onResult: (isSuccess, message) {
+            if (!isSuccess) {
+              AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
+                  isError: true);
+              return;
+            }
+          },
+        );
+
+        await trackingService.saveHistory(
+          studentId: studentId,
+          driverId: driverId,
+          dutyType: type,
+          trackingId: id,
+          imageBase64: capturedImageBase64
+              .value, // Tambahkan parameter base64 jika diperlukan
+          onResult: (isSuccess, message) {
+            AppUtils.showSnackbar(
+              isSuccess ? "Berhasil" : "Gagal",
+              message,
+              isError: !isSuccess,
+            );
+          },
+        );
+
+        // Reset gambar setelah berhasil
+        resetCapturedImage();
+      },
+      onCancel: () {
+        // Reset gambar jika dibatalkan
+        resetCapturedImage();
+      },
+      confirmText: "Sudah Benar",
+      cancelText: "Batalkan",
+      countdownSeconds: 5,
+    );
   }
 
   void removeTrackingIdStudent(
@@ -132,43 +199,67 @@ class DriverController extends GetxController {
     final studentProfile = await _authService.getUserIdByNISN(nisn);
     if (studentProfile != null) {
       String studentId = studentProfile.userId;
+
+      // Reset gambar sebelumnya
+      resetCapturedImage();
+
+      // Ambil gambar terlebih dahulu
+      await takePicture();
+
+      // Cek apakah gambar berhasil diambil
+      if (capturedImage.value == null) {
+        AppUtils.showSnackbar("Oops!", "Gambar diperlukan untuk melanjutkan",
+            isError: true);
+        return;
+      }
+
       //Function untuk add history ke Firebase
-      AppUtils.showDialog("Apakah Data Anda Benar?",
-          "nama: ${studentProfile.name}\nnisn: ${studentProfile.nisn}\nalamat: ${studentProfile.address}\nsekolah: ${studentProfile.school}",
-          onConfirm: () async {
-        // Jika user menekan tombol konfirmasi, lanjutkan dengan update
-        studentIds.add(studentId);
+      AppUtils.showDialog(
+        "Apakah Data Anda Benar?",
+        "nama: ${studentProfile.name}\nnisn: ${studentProfile.nisn}\nalamat: ${studentProfile.address}\nsekolah: ${studentProfile.school}",
+        image: capturedImage.value!, // Pass the captured image
+        onConfirm: () async {
+          // Jika user menekan tombol konfirmasi, lanjutkan dengan update
+          studentIds.add(studentId);
 
-        //nampilin dialog konfirmasi
+          await trackingService.updateTrackingIdStudent(
+            studentId: studentId,
+            trackingId: trackingId.value,
+            onResult: (isSuccess, message) {
+              if (!isSuccess) {
+                AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
+                    isError: true);
+                return;
+              }
+            },
+          );
+          await trackingService.saveHistory(
+            studentId: studentId,
+            driverId: driverID,
+            dutyType: deliveryType.value,
+            trackingId: trackingId.value,
+            imageBase64: capturedImageBase64
+                .value, // Tambahkan parameter base64 jika diperlukan
+            onResult: (isSuccess, message) {
+              if (isSuccess) {
+                AppUtils.showSnackbar("Berhasil", message);
+              } else {
+                AppUtils.showSnackbar("Gagal", message, isError: true);
+              }
+            },
+          );
 
-        await trackingService.updateTrackingIdStudent(
-          studentId: studentId,
-          trackingId: trackingId.value,
-          onResult: (isSuccess, message) {
-            if (!isSuccess) {
-              AppUtils.showSnackbar("Oops!", "Gagal Memperbarui Data Student",
-                  isError: true);
-              return;
-            }
-          },
-        );
-        await trackingService.saveHistory(
-          studentId: studentId,
-          driverId: driverID,
-          dutyType: deliveryType.value,
-          trackingId: trackingId.value,
-          onResult: (isSuccess, message) {
-            if (isSuccess) {
-              AppUtils.showSnackbar("Berhasil", message);
-            } else {
-              AppUtils.showSnackbar("Gagal", message, isError: true);
-            }
-          },
-        );
-      },
-          confirmText: "Sudah Benar",
-          cancelText: "Batalkan",
-          countdownSeconds: 5);
+          // Reset gambar setelah berhasil
+          resetCapturedImage();
+        },
+        onCancel: () {
+          // Reset gambar jika dibatalkan
+          resetCapturedImage();
+        },
+        confirmText: "Sudah Benar",
+        cancelText: "Batalkan",
+        countdownSeconds: 5,
+      );
       studentIds.add(studentId);
     } else {
       AppUtils.showSnackbar(

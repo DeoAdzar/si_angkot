@@ -169,6 +169,7 @@ class TrackingService {
     required String dutyType, // "berangkat" atau "pulang"
     required String trackingId,
     required Function(bool isSuccess, String message) onResult,
+    required String imageBase64, //parameter baru untuk menyimpan gambar
   }) async {
     // inisialisasi Firebase Database
     // dan format tanggal
@@ -204,8 +205,12 @@ class TrackingService {
       if (studentData == null || studentData['onBoardTimestamp'] == null) {
         updates['$studentPath/trackingId'] = trackingId;
         updates['$studentPath/onBoardTimestamp'] = now;
+        updates['$studentPath/imageBase64'] =
+            imageBase64; //simpan gambar di history student ketika naik kendaraaan
         updates['$driverPath/trackingId'] = trackingId;
         updates['$driverPath/onBoardTimestamp'] = now;
+        updates['$driverPath/imageBase64'] =
+            imageBase64; // simpan gambar di history driver ketika naik kendaraaan
       } else {
         updates['$studentPath/offBoardTimestamp'] = now;
         updates['$driverPath/offBoardTimestamp'] = now;
